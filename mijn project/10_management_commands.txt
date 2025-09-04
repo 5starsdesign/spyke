@@ -1,0 +1,9 @@
+Custom management commands
+==========================
+
+auth: changepassword, createsuperuser
+contenttypes: remove_stale_contenttypes
+sessions: clearsessions
+staticfiles: collectstatic, findstatic, runserver
+account: account_unsetmultipleprimaryemails
+properties: seed_demo

@@ -1,0 +1,123 @@
+{% extends "dash/_layout.html" %}
+{% load static %}
+
+{% block sidebar %}
+  {% include "dash/_sidebar_member.html" with active="eigen" %}
+{% endblock %}
+
+{% block dash_content %}
+<h1 class="mb-3">Mijn woning</h1>
+
+<div class="mb-3">
+  {% if obj.is_published %}
+    <span class="badge bg-success">Gepubliceerd</span>
+  {% else %}
+    <span class="badge bg-secondary">Concept</span>
+  {% endif %}
+</div>
+
+<div class="card mb-3 shadow-sm">
+  <div class="card-header fw-bold">Overzicht</div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <dl class="row mb-0">
+          <dt class="col-5">Titel</dt><dd class="col-7">{{ obj.my_title|default:"-" }}</dd>
+          <dt class="col-5">Straat</dt><dd class="col-7">{{ obj.my_address|default:"-" }}</dd>
+          <dt class="col-5">Postcode</dt><dd class="col-7">{{ obj.my_postcode|default:"-" }}</dd>
+          <dt class="col-5">Plaats</dt><dd class="col-7">{{ obj.my_city|default:"-" }}</dd>
+          <dt class="col-5">Provincie</dt><dd class="col-7">{{ obj.my_province|default:"-" }}</dd>
+          <dt class="col-5">Type woning</dt><dd class="col-7">{{ obj.get_my_property_type_display|default:"-" }}</dd>
+          <dt class="col-5">Woonoppervlakte</dt><dd class="col-7">{{ obj.my_living_area|default:"-" }}{% if obj.my_living_area %} m²{% endif %}</dd>
+          <dt class="col-5">Kamers</dt><dd class="col-7">{{ obj.my_rooms|default:"-" }}</dd>
+          <dt class="col-5">Slaapkamers</dt><dd class="col-7">{{ obj.my_bedrooms|default:"-" }}</dd>
+          <dt class="col-5">Verdieping</dt><dd class="col-7">{{ obj.my_floor|default:"-" }}</dd>
+          <dt class="col-5">Aantal verdiepingen</dt><dd class="col-7">{{ obj.my_floors|default:"-" }}</dd>
+          <dt class="col-5">Huurprijs</dt><dd class="col-7">{% if obj.my_rent %}€ {{ obj.my_rent }}{% else %}-{% endif %}</dd>
+        </dl>
+      </div>
+      <div class="col-md-6">
+        <dl class="row mb-0">
+          <dt class="col-7">Buitenruimte</dt>
+          <dd class="col-5">
+            {% if obj.my_garden %}Tuin{% endif %}{% if obj.my_balcony %}{% if obj.my_garden %}, {% endif %}Balkon{% endif %}{% if obj.my_terrace %}{% if obj.my_garden or obj.my_balcony %}, {% endif %}Terras{% endif %}
+            {% if not obj.my_garden and not obj.my_balcony and not obj.my_terrace %}-{% endif %}
+          </dd>
+          <dt class="col-7">Opslag</dt>
+          <dd class="col-5">
+            {% if obj.my_storage %}Berging{% endif %}{% if obj.shed %}{% if obj.my_storage %}, {% endif %}Schuur{% endif %}{% if obj.my_parking_garage %}{% if obj.my_storage or obj.shed %}, {% endif %}Garage{% endif %}
+            {% if not obj.my_storage and not obj.shed and not obj.my_parking_garage %}-{% endif %}
+          </dd>
+          <dt class="col-7">Locatie</dt>
+          <dd class="col-5">
+            {% if obj.my_near_shops %}Dichtbij winkels{% endif %}{% if obj.my_near_schools %}{% if obj.my_near_shops %}, {% endif %}Dichtbij scholen{% endif %}{% if obj.my_ov %}{% if obj.my_near_shops or obj.my_near_schools %}, {% endif %}Dichtbij OV{% endif %}
+            {% if not obj.my_near_shops and not obj.my_near_schools and not obj.my_ov %}-{% endif %}
+          </dd>
+          <dt class="col-7">Extra</dt>
+          <dd class="col-5">
+            {% if obj.wheelchair %}Rolstoeltoegankelijk{% endif %}{% if obj.pets_allowed %}{% if obj.wheelchair %}, {% endif %}Huisdieren toegestaan{% endif %}{% if obj.new_build %}{% if obj.wheelchair or obj.pets_allowed %}, {% endif %}Nieuwbouw{% endif %}
+            {% if not obj.wheelchair and not obj.pets_allowed and not obj.new_build %}-{% endif %}
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">Hoofdfoto</div>
+      <div class="card-body">
+        {% if obj.my_cover %}
+          <img class="img-fluid rounded" src="{{ obj.my_cover.url }}" alt="Hoofdfoto">
+        {% else %}
+          <div class="text-muted">Geen hoofdfoto geüpload.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">Plattegrond</div>
+      <div class="card-body">
+        {% if obj.my_floorplan %}
+          <img class="img-fluid rounded" src="{{ obj.my_floorplan.url }}" alt="Plattegrond">
+        {% else %}
+          <div class="text-muted">Geen plattegrond geüpload.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card my-3 shadow-sm">
+  <div class="card-header fw-bold">Foto's</div>
+  <div class="card-body">
+    {% if images %}
+      <div class="row g-2">
+        {% for im in images %}
+          <div class="col-6 col-md-3">
+            <img class="img-fluid rounded" src="{{ im.image.url }}" alt="Foto {{ forloop.counter }}">
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-muted">Geen extra foto's toegevoegd.</div>
+    {% endif %}
+  </div>
+</div>
+
+{% if obj.my_description %}
+<div class="card my-3 shadow-sm">
+  <div class="card-header fw-bold">Beschrijving</div>
+  <div class="card-body">
+    <p class="mb-0">{{ obj.my_description|linebreaksbr }}</p>
+  </div>
+</div>
+{% endif %}
+
+<div class="d-flex gap-2">
+  <a class="btn btn-secondary" href="{% url 'member_own' %}">Bewerk woning</a>
+</div>
+{% endblock %}

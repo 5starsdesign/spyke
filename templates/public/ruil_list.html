@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Ruilwoningen{% endblock %}{% block content %}
+<h3>Ruilwoningen</h3>
+<div class="row row-cols-1 row-cols-md-3 g-3">
+  {% for l in items %}
+  <div class="col"><div class="card h-100">
+    <div class="card-body">
+      <h6 class="card-title">{{ l.my_title }}</h6>
+      <div class="small text-muted">{{ l.my_city }} · {{ l.get_my_property_type_display }}</div>
+      <div class="mt-2"><small>{{ l.my_description|truncatewords:18 }}</small></div>
+    </div>
+    <div class="card-footer bg-white"><a class="btn btn-outline-primary w-100" href="/woningen/ruil/{{ l.pk }}/">Bekijk</a></div>
+  </div></div>
+  {% empty %}<div class="col"><div class="alert alert-info">Geen ruilwoningen</div></div>{% endfor %}
+</div>
+{% endblock %}

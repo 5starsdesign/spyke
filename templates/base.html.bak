@@ -1,0 +1,51 @@
+{% load static %}
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Woningruil{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+    <style>.footer{border-top:1px solid #eee;margin-top:3rem;padding:2rem 0;font-size:.95rem}.nav-link.active{font-weight:600}.sidebar{min-width:220px}</style>
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/"><img src="{% static 'img/logo.svg' %}" height="28" class="me-2">Woningruil</a>
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navmain"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navmain">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="/ruilwoningen/">Ruilwoningen</a></li>
+            <li class="nav-item"><a class="nav-link" href="/huurwoningen/">Huurwoningen</a></li>
+            <li class="nav-item"><a class="nav-link" href="/koopwoningen/">Koopwoningen</a></li>
+          </ul>
+          <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+              <li class="nav-item"><a class="nav-link" href="/accounts/logout/">Uitloggen</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="/accounts/login/">Inloggen</a></li>
+              <li class="nav-item"><a class="nav-link" href="/accounts/signup/">Account maken</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container my-4">{% block content %}{% endblock %}</main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="row g-3">
+          <div class="col-md-4"><h6>Over</h6><p>Platform voor woningruil, verhuur en koop. Modern & overzichtelijk.</p></div>
+          <div class="col-md-4"><h6>Navigatie</h6><ul class="list-unstyled"><li><a href="/ruilwoningen/">Ruilwoningen</a></li><li><a href="/huurwoningen/">Huurwoningen</a></li><li><a href="/koopwoningen/">Koopwoningen</a></li></ul></div>
+          <div class="col-md-4"><h6>Contact</h6><p>E-mail: info@example.com</p></div>
+        </div>
+        <div class="text-center text-muted mt-3">&copy; {{ now|date:"Y" }} Woningruil</div>
+      </div>
+    </footer>
+
+    <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

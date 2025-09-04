@@ -1,0 +1,178 @@
+Projectboom
+===========
+
+├─ Dockerfile (487 bytes)
+├─ docker-compose.yml (586 bytes)
+├─ manage.py (263 bytes)
+├─ requirements.txt (193 bytes)
+  accounts/
+  ├─ __init__.py (52 bytes)
+  ├─ adapter.py (500 bytes)
+  ├─ admin.py (405 bytes)
+  ├─ apps.py (204 bytes)
+  ├─ context_processors.py (576 bytes)
+  ├─ middleware.py (996 bytes)
+  ├─ models.py (4211 bytes)
+    migrations/
+    ├─ 0001_initial.py (1625 bytes)
+    ├─ 0002_remove_profile_bio_remove_profile_company_name_and_more.py (2041 bytes)
+    ├─ 0003_alter_profile_city_alter_profile_province_and_more.py (893 bytes)
+    ├─ 0004_profile_premium.py (452 bytes)
+    ├─ 0005_alter_profile_city_alter_profile_premium_and_more.py (920 bytes)
+    ├─ 0006_agencyprofile.py (4085 bytes)
+    ├─ __init__.py (0 bytes)
+    templatetags/
+    ├─ socialapp_tags.py (399 bytes)
+  audits/
+  ├─ audit_20250903_105958.txt (10251 bytes)
+  ├─ audit_20250903_150111.txt (10270 bytes)
+  config/
+  ├─ __init__.py (7 bytes)
+  ├─ asgi.py (164 bytes)
+  ├─ settings.py (4020 bytes)
+  ├─ urls.py (1124 bytes)
+  ├─ wsgi.py (164 bytes)
+  dashboards/
+  ├─ __init__.py (7 bytes)
+  ├─ agency_forms.py (4405 bytes)
+  ├─ agency_new_form.py (9739 bytes)
+  ├─ agency_profile_forms.py (2796 bytes)
+  ├─ agency_views.py (7175 bytes)
+  ├─ forms.py (7881 bytes)
+  ├─ member_views.py (4036 bytes)
+  ├─ owner_forms.py (5797 bytes)
+  ├─ owner_new_form.py (9738 bytes)
+  ├─ owner_views.py (5966 bytes)
+  ├─ urls.py (1987 bytes)
+  ├─ utils.py (1459 bytes)
+  ├─ views.py (4985 bytes)
+  matchmaking/
+  ├─ __init__.py (7 bytes)
+  ├─ utils.py (1217 bytes)
+  mijn project/
+  mijn project1/
+  ├─ 00_overzicht.txt (678 bytes)
+  ├─ 01_settings.txt (13108 bytes)
+  ├─ 02_urls.txt (20627 bytes)
+  ├─ 03_views.txt (5900 bytes)
+  ├─ 04_models.txt (12247 bytes)
+  ├─ 05_migrations.txt (1631 bytes)
+  ├─ 06_templates_index.txt (16791 bytes)
+  ├─ 07_projectboom.txt (3452 bytes)
+  ├─ 08_requirements.txt (220 bytes)
+  ├─ 09_docker.txt (1151 bytes)
+  ├─ 10_management_commands.txt (272 bytes)
+  ├─ 11_env.txt (1119 bytes)
+  ├─ 12_db_schema.txt (583 bytes)
+  ├─ copy_Dockerfile.txt (487 bytes)
+  ├─ copy_docker-compose.yml.txt (586 bytes)
+  ├─ copy_manage.py.txt (263 bytes)
+  ├─ copy_requirements.txt.txt (193 bytes)
+  mijn project2/
+  ├─ 00_overzicht.txt (678 bytes)
+  ├─ 01_settings.txt (13108 bytes)
+  ├─ 02_urls.txt (164 bytes)
+  ├─ 03_views.txt (56 bytes)
+  ├─ 04_models.txt (15131 bytes)
+  ├─ 05_migrations.txt (1927 bytes)
+  ├─ 06_templates_index.txt (17009 bytes)
+  ├─ 07_projectboom.txt (4704 bytes)
+  ├─ 08_requirements.txt (220 bytes)
+  ├─ 09_docker.txt (1151 bytes)
+  ├─ 10_management_commands.txt (272 bytes)
+  ├─ 11_env.txt (1100 bytes)
+  ├─ 12_db_schema.txt (583 bytes)
+  ├─ copy_Dockerfile.txt (487 bytes)
+  ├─ copy_docker-compose.yml.txt (586 bytes)
+  ├─ copy_manage.py.txt (263 bytes)
+  ├─ copy_requirements.txt.txt (193 bytes)
+  pages/
+  ├─ __init__.py (7 bytes)
+  ├─ agency_public.py (280 bytes)
+  ├─ urls.py (391 bytes)
+  ├─ views.py (1190 bytes)
+  properties/
+  ├─ __init__.py (7 bytes)
+  ├─ admin.py (1828 bytes)
+  ├─ forms.py (499 bytes)
+  ├─ models.py (11183 bytes)
+  ├─ urls.py (344 bytes)
+  ├─ views.py (4358 bytes)
+    management/
+    ├─ __init__.py (7 bytes)
+      commands/
+      ├─ __init__.py (7 bytes)
+      ├─ seed_demo.py (2787 bytes)
+    migrations/
+    ├─ 0001_initial.py (7244 bytes)
+    ├─ 0002_wish.py (1555 bytes)
+    ├─ 0003_alter_exchangeoffer_options_and_more.py (4183 bytes)
+    ├─ 0004_exchangeoffer_my_address_exchangeoffer_my_bedrooms_and_more.py (2409 bytes)
+    ├─ 0005_exchangeoffer_my_cover.py (477 bytes)
+    ├─ 0006_wish_tenure_wish_want_balcony_wish_want_garage_and_more.py (3797 bytes)
+    ├─ 0007_remove_wish_tenure_alter_wish_price_alter_wish_type.py (990 bytes)
+    ├─ 0008_alter_exchangeoffer_options_and_more.py (9981 bytes)
+    ├─ 0009_exchangeoffer_created_at_exchangeoffer_updated_at.py (691 bytes)
+    ├─ 0010_marketlisting_is_featured_marketlisting_is_published.py (600 bytes)
+    ├─ __init__.py (0 bytes)
+  static/
+    agency/
+    css/
+    img/
+      ads/
+    vendor/
+      bootstrap/
+  templates/
+  ├─ base.html (3548 bytes)
+  ├─ home.html (1124 bytes)
+    account/
+    ├─ login.html (1152 bytes)
+    ├─ signup.html (1402 bytes)
+    agency/
+    ├─ public_profile.html (3563 bytes)
+    dash/
+    ├─ _layout.html (247 bytes)
+    ├─ _sidebar_agency.html (629 bytes)
+    ├─ _sidebar_member.html (800 bytes)
+    ├─ _sidebar_owner.html (621 bytes)
+      agency/
+      ├─ _profile_form_fields.html (3409 bytes)
+      ├─ edit.html (5596 bytes)
+      ├─ home.html (1489 bytes)
+      ├─ list.html (540 bytes)
+      ├─ listing_form.html (463 bytes)
+      ├─ my_listings.html (1111 bytes)
+      ├─ new.html (11772 bytes)
+      ├─ new_form.html (460 bytes)
+      ├─ profile.html (4637 bytes)
+      member/
+      ├─ home.html (497 bytes)
+      ├─ matches.html (256 bytes)
+      ├─ offer_form.html (19565 bytes)
+      ├─ own.html (8630 bytes)
+      ├─ own_view.html (5403 bytes)
+      ├─ profile.html (5368 bytes)
+      ├─ wish.html (5774 bytes)
+      ├─ wish_view.html (3852 bytes)
+      owner/
+      ├─ edit.html (5596 bytes)
+      ├─ home.html (604 bytes)
+      ├─ list.html (539 bytes)
+      ├─ listing_form.html (327 bytes)
+      ├─ my.html (1166 bytes)
+      ├─ my_listings.html (1111 bytes)
+      ├─ new.html (11771 bytes)
+      ├─ new_form.html (456 bytes)
+      ├─ profile.html (2423 bytes)
+    includes/
+    ├─ _access.html (2682 bytes)
+    ├─ _auto_lock_properties.html (1209 bytes)
+    public/
+    ├─ agency.html (1046 bytes)
+    ├─ exchange_detail.html (1148 bytes)
+    ├─ huur_list.html (835 bytes)
+    ├─ koop_list.html (835 bytes)
+    ├─ market_detail.html (1578 bytes)
+    ├─ ruil_list.html (766 bytes)
+    socialaccount/
+    ├─ signup.html (1251 bytes)

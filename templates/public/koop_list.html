@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Koopwoningen{% endblock %}
+{% block content %}
+<h3>Koopwoningen</h3>
+
+<div class="row row-cols-1 row-cols-md-3 g-3">
+  {% for l in items %}
+  <div class="col">
+    <div class="card h-100">
+      <img src="{{ l.cover_url }}" alt="{{ l.title }}"
+           class="card-img-top" loading="lazy"
+           style="height:200px;object-fit:cover;">
+      <div class="card-body">
+        <h6 class="card-title mb-1">{{ l.title }}</h6>
+        <div class="small text-muted">{{ l.city }} · {{ l.get_property_type_display }}</div>
+        <div class="fw-semibold mt-2">€ {{ l.price }}</div>
+      </div>
+      <div class="card-footer bg-white">
+        <a class="btn btn-primary w-100" href="/woningen/koop/{{ l.slug }}/">Details</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col"><div class="alert alert-info">Geen woningen</div></div>
+  {% endfor %}
+</div>
+{% endblock %}

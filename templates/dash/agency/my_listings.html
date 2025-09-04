@@ -1,0 +1,29 @@
+{% extends "dash/_layout.html" %}
+{% block sidebar %}{% include "dash/_sidebar_agency.html" %}{% endblock %}
+{% block dash_content %}
+<h3>Mijn woningen</h3>
+{% if listings %}
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr><th>Titel</th><th>Plaats</th><th>Prijs</th><th style="width:260px">Acties</th></tr>
+      </thead>
+      <tbody>
+      {% for l in listings %}
+        <tr>
+          <td>{{ l.title|default:"(zonder titel)" }}</td>
+          <td>{{ l.city|default:"-" }}</td>
+          <td>{% if l.price %}€ {{ l.price }}{% else %}-{% endif %}</td>
+          <td class="d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" href="{{ l.detail_url }}">Bekijk</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'agency_listing_edit' l.slug|default:l.pk %}">Woning aanpassen</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info">Je hebt nog geen woningen geplaatst. <a href="/dash/agency/nieuw/">Voeg er één toe</a>.</div>
+{% endif %}
+{% endblock %}

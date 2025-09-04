@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Blog · Woningruil{% endblock %}
+{% block extra_css %}
+  <meta name="description" content="Artikelen en nieuws.">
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-8">
+      {% if page_obj.object_list %}
+        {% for p in page_obj.object_list %}
+        <article class="card mb-3">
+          {% if p.cover %}<img src="{{ p.cover.url }}" class="card-img-top" alt="{{ p.title }}">{% endif %}
+          <div class="card-body">
+            <h2 class="h4"><a href="{{ p.get_absolute_url }}" class="stretched-link text-decoration-none">{{ p.title }}</a></h2>
+            <div class="small text-muted mb-2">
+              {% if p.published_at %}{{ p.published_at|date:"j F Y" }}{% endif %}
+              {% if p.author %} · {{ p.author.get_full_name|default:p.author.username }}{% endif %}
+            </div>
+            <p class="mb-2">{{ p.excerpt|default:p.content|truncatewords:40 }}</p>
+            <div class="small text-muted">
+              {% for c in p.categories.all %}<a href="{% url 'blog:by_category' c.slug %}" class="me-2">#{{ c.name }}</a>{% endfor %}
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+        <nav aria-label="Paginatie" class="mt-3">
+          <ul class="pagination">
+            {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Vorige</a></li>{% endif %}
+            <li class="page-item disabled"><span class="page-link">Pagina {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Volgende</a></li>{% endif %}
+          </ul>
+        </nav>
+      {% else %}
+        <div class="alert alert-info">Nog geen artikelen.</div>
+      {% endif %}
+    </div>
+    <aside class="col-lg-4">
+      {% include "blog/_sidebar.html" with categories=categories tags=tags archives=archives %}
+    </aside>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ obj.seo_title|default:obj.title }} · Blog{% endblock %}
+{% block extra_css %}
+  <meta name="description" content="{{ obj.seo_description|default:obj.excerpt|default:obj.content|truncatechars:160 }}">
+  <link rel="canonical" href="{{ obj.canonical_url|default:request.build_absolute_uri }}">
+  <meta property="og:title" content="{{ obj.seo_title|default:obj.title }}">
+  <meta property="og:description" content="{{ obj.seo_description|default:obj.excerpt|default:obj.content|truncatechars:160 }}">
+  {% if obj.og_image %}<meta property="og:image" content="{{ obj.og_image.url }}">{% elif obj.cover %}<meta property="og:image" content="{{ obj.cover.url }}">{% endif %}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <article>
+        <header class="mb-3">
+          <h1 class="h2">{{ obj.title }}</h1>
+          <div class="small text-muted">
+            {% if obj.published_at %}{{ obj.published_at|date:"j F Y" }}{% endif %}
+            {% if obj.author %} · {{ obj.author.get_full_name|default:obj.author.username }}{% endif %}
+          </div>
+        </header>
+        {% if obj.cover %}<img src="{{ obj.cover.url }}" class="img-fluid mb-3" alt="{{ obj.title }}">{% endif %}
+        <div class="content">
+          {{ obj.content|linebreaks }}
+        </div>
+        <footer class="mt-4 small text-muted">
+          Categorieën:
+          {% for c in obj.categories.all %}<a href="{% url 'blog:by_category' c.slug %}" class="me-2">#{{ c.name }}</a>{% empty %}–{% endfor %}
+          <br>Tags:
+          {% for t in obj.tags.all %}<a href="{% url 'blog:by_tag' t.slug %}" class="me-2">#{{ t.name }}</a>{% empty %}–{% endfor %}
+        </footer>
+      </article>
+    </div>
+    <aside class="col-lg-4">
+      {% include "blog/_sidebar.html" with categories=categories tags=tags archives=archives %}
+    </aside>
+  </div>
+</div>
+{% endblock %}

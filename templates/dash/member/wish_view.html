@@ -1,0 +1,91 @@
+{% extends "dash/_layout.html" %}
+{% load static %}
+
+{% block sidebar %}
+  {% include "dash/_sidebar_member.html" with active="wens" %}
+{% endblock %}
+
+{% block dash_content %}
+<h1 class="mb-3">Mijn wenswoning</h1>
+
+<div class="card mb-3 shadow-sm">
+  <div class="card-header fw-bold">Filters</div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <dl class="row mb-0">
+          <dt class="col-6">Plaats(en) / regio</dt><dd class="col-6">{{ wish.city|default:"-" }}</dd>
+          <dt class="col-6">Type woning</dt><dd class="col-6">{% if wish.type %}{{ wish.get_type_display }}{% else %}-{% endif %}</dd>
+          <dt class="col-6">Max. huurprijs</dt><dd class="col-6">{% if wish.price %}€ {{ wish.price }}{% else %}-{% endif %}</dd>
+        </dl>
+      </div>
+      <div class="col-md-6">
+        <dl class="row mb-0">
+          <dt class="col-7">Min. woonoppervlakte</dt><dd class="col-5">{% if wish.size %}{{ wish.size }} m²{% else %}-{% endif %}</dd>
+          <dt class="col-7">Min. kamers</dt><dd class="col-5">{{ wish.rooms|default:"-" }}</dd>
+          <dt class="col-7">Min. slaapkamers</dt><dd class="col-5">{{ wish.bedrooms|default:"-" }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3 shadow-sm">
+  <div class="card-header fw-bold">Voorkeuren</div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <dl class="row mb-0">
+          <dt class="col-6">Buitenruimte</dt>
+          <dd class="col-6">
+            {% with items="" %}
+              {% if wish.want_garden %}Tuin{% endif %}
+              {% if wish.want_balcony %}{% if wish.want_garden %}, {% endif %}Balkon{% endif %}
+              {% if wish.want_terrace %}{% if wish.want_garden or wish.want_balcony %}, {% endif %}Terras{% endif %}
+              {% if not wish.want_garden and not wish.want_balcony and not wish.want_terrace %}-{% endif %}
+            {% endwith %}
+          </dd>
+          <dt class="col-6">Opslag</dt>
+          <dd class="col-6">
+            {% with a=wish.want_storage b=wish.want_shed c=wish.want_garage %}
+              {% if a %}Berging{% endif %}{% if b %}{% if a %}, {% endif %}Schuur{% endif %}{% if c %}{% if a or b %}, {% endif %}Garage{% endif %}
+              {% if not a and not b and not c %}-{% endif %}
+            {% endwith %}
+          </dd>
+        </dl>
+      </div>
+      <div class="col-md-6">
+        <dl class="row mb-0">
+          <dt class="col-6">Locatie</dt>
+          <dd class="col-6">
+            {% with s=wish.want_near_shops sc=wish.want_near_schools o=wish.want_near_ov %}
+              {% if s %}Dichtbij winkels{% endif %}{% if sc %}{% if s %}, {% endif %}Dichtbij scholen{% endif %}{% if o %}{% if s or sc %}, {% endif %}Dichtbij OV{% endif %}
+              {% if not s and not sc and not o %}-{% endif %}
+            {% endwith %}
+          </dd>
+          <dt class="col-6">Extra’s</dt>
+          <dd class="col-6">
+            {% with g=wish.want_ground_floor l=wish.want_lift w=wish.want_wheelchair p=wish.want_pets_allowed %}
+              {% if g %}Gelijkvloers{% endif %}{% if l %}{% if g %}, {% endif %}Lift{% endif %}{% if w %}{% if g or l %}, {% endif %}Rolstoeltoegankelijk{% endif %}{% if p %}{% if g or l or w %}, {% endif %}Huisdieren toegestaan{% endif %}
+              {% if not g and not l and not w and not p %}-{% endif %}
+            {% endwith %}
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if wish.features %}
+<div class="card mb-3 shadow-sm">
+  <div class="card-header fw-bold">Extra wensen</div>
+  <div class="card-body">
+    <p class="mb-0">{{ wish.features|linebreaksbr }}</p>
+  </div>
+</div>
+{% endif %}
+
+<div class="d-flex gap-2">
+  <a class="btn btn-secondary" href="{% url 'member_wish' %}">Bewerk wenswoning</a>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% load static %}
+<a href="{% if obj.listing_kind == 'HUUR' %}/woningen/huur/{{ obj.slug }}/{% else %}/woningen/koop/{{ obj.slug }}/{% endif %}"
+   class="ratio ratio-4x3 d-block bg-light rounded-top overflow-hidden">
+  <img src="{{ obj.cover_url }}"
+       alt="{{ obj.title }}"
+       class="w-100 h-100 object-fit-cover"
+       loading="lazy">
+</a>

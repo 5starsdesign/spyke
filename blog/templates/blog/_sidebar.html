@@ -1,0 +1,42 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <h6 class="text-uppercase fw-semibold mb-3">Zoeken</h6>
+    <form action="{% url 'blog:list' %}" method="get" class="input-group">
+      <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Zoek in artikelen">
+      <button class="btn btn-outline-primary" type="submit">Zoek</button>
+    </form>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h6 class="text-uppercase fw-semibold mb-3">Categorieën</h6>
+    <ul class="list-unstyled mb-0">
+      {% for c in categories %}
+        <li><a href="{% url 'blog:by_category' c.slug %}">{{ c.name }}</a> <span class="text-muted">({{ c.num }})</span></li>
+      {% empty %}<li class="text-muted">Geen categorieën</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h6 class="text-uppercase fw-semibold mb-3">Archief</h6>
+    <ul class="list-unstyled mb-0">
+      {% for a in archives %}
+        <li><a href="{% url 'blog:archive' a.year a.month %}">{{ a.year }} – {{ a.month|stringformat:"02d" }}</a></li>
+      {% empty %}<li class="text-muted">Nog geen archief</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h6 class="text-uppercase fw-semibold mb-3">Tags</h6>
+    <div class="d-flex flex-wrap gap-2">
+      {% for t in tags %}
+        <a class="badge bg-light text-dark border" href="{% url 'blog:by_tag' t.slug %}">{{ t.name }}</a>
+      {% empty %}<span class="text-muted">Geen tags</span>{% endfor %}
+    </div>
+  </div>
+</div>

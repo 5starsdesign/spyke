@@ -1,0 +1,12 @@
+{% extends "dash/_layout.html" %}
+{% block sidebar %}{% include "dash/_sidebar_member.html" %}{% endblock %}
+{% block dash_content %}
+<h3>Welkom</h3>
+{% if offer %}
+  <p class="text-muted">Je woningruil-profiel is aangemaakt.</p>
+  <a class="btn btn-outline-primary" href="/dash/member/matches/">Bekijk matches</a>
+{% else %}
+  <div class="alert alert-info">Voeg eerst je eigen en wenswoning toe.</div>
+  <a class="btn btn-primary" href="/dash/member/woning/">Start</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% block title %}Woning · {{ obj.title }}{% endblock %}{% block content %}
+<div class="row g-3">
+  <div class="col-md-7">
+    {% with first=obj.marketlistingimage_set.first %}{% if first %}<img src="{{ first.image.url }}" class="img-fluid rounded mb-2">{% endif %}{% endwith %}
+    <div class="d-flex gap-2 flex-wrap">
+      {% for im in obj.marketlistingimage_set.all %}<img src="{{ im.image.url }}" style="height:80px" class="rounded">{% endfor %}
+    </div>
+    <h3 class="mt-3">{{ obj.title }}</h3>
+    <div class="text-muted">{{ obj.city }} · {{ obj.get_property_type_display }}</div>
+    <div class="mt-3">{{ obj.description|linebreaks }}</div>
+  </div>
+  <div class="col-md-5">
+    <div class="card"><div class="card-body">
+      <div class="h5">€ {{ obj.price }}</div>
+      <ul class="list-unstyled small mb-3">
+        <li>Oppervlakte: {{ obj.living_area }} m²</li>
+        <li>Kamers: {{ obj.rooms }}</li>
+        {% if obj.floor is not None %}<li>Verdieping: {{ obj.floor }}</li>{% endif %}
+      </ul>
+      {% if can_view_contact %}
+        <div class="alert alert-success">Contactgegevens zichtbaar.</div>
+        <p class="small mb-1">Eigenaar: {{ obj.owner.username }}</p>
+        <a class="btn btn-primary w-100" href="mailto:{{ obj.owner.email }}">Neem contact op</a>
+      {% else %}
+        <div class="alert alert-warning">Log in om volledige info en contact te zien.</div>
+        <a class="btn btn-outline-primary w-100" href="/accounts/login/">Inloggen</a>
+      {% endif %}
+    </div></div>
+  </div>
+</div>
+{% endblock %}

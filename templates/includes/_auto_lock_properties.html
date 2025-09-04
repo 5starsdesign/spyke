@@ -1,0 +1,27 @@
+<script>
+(function(){
+  // Alleen voor ingelogde niet-premium gebruikers blurren
+  var CAN_BLUR = {{ ACCESS.can_view_blur|yesno:"true,false" }};
+  var CAN_FULL = {{ ACCESS.can_view_full|yesno:"true,false" }};
+  if (!CAN_BLUR || CAN_FULL) return;
+
+  // Hints waarop we blurren (NL)
+  const KEYS = ["adres","straat","huisnummer","postcode","contact","telefoon","e-mail","email","e-mailadres","eigenaar"];
+  // Markeer expliciet aangegeven data-lock velden
+  document.querySelectorAll('[data-lock="sensitive"]').forEach(el => window.applyLock(el));
+
+  // Heuristisch: lijnen met label + waarde
+  const containers = document.querySelectorAll("main, .content, .container, .property, .details, .card, .list-group");
+  containers.forEach(root=>{
+    root.querySelectorAll("div,li,p,dd").forEach(el=>{
+      const txt = (el.innerText || "").toLowerCase();
+      if (!txt) return;
+      // Niet blurren als het expliciet gaat over provincie/gemeente/prijs/omschrijving/foto's
+      if (txt.includes("provincie") || txt.includes("gemeente") || txt.includes("prijs") || txt.includes("omschrijving")) return;
+      if (KEYS.some(k=> txt.includes(k))) {
+        window.applyLock(el);
+      }
+    });
+  });
+})();
+</script>

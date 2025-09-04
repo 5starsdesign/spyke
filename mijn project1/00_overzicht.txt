@@ -1,0 +1,31 @@
+Projectoverzicht
+================
+
+Timestamp        : 2025-09-03 06:44:32
+Python           : 3.12.11 (CPython)
+Django           : 5.1.11
+DJANGO_SETTINGS  : config.settings
+DEBUG            : True
+ALLOWED_HOSTS    : localhost, 127.0.0.1, [::1]
+Time zone        : Europe/Amsterdam
+Language code    : nl
+
+Apps (INSTALLED_APPS)
+=====================
+
+- django.contrib.admin
+- django.contrib.auth
+- django.contrib.contenttypes
+- django.contrib.sessions
+- django.contrib.messages
+- django.contrib.staticfiles
+- django.contrib.sites
+- allauth
+- allauth.account
+- allauth.socialaccount
+- allauth.socialaccount.providers.google
+- accounts
+- properties
+- dashboards
+- pages
+- matchmaking

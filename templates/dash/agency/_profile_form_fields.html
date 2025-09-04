@@ -1,0 +1,54 @@
+<div class="card mb-3 shadow-sm">
+  <div class="card-header fw-bold">Bedrijfsnaam & nummers</div>
+  <div class="card-body row g-3">
+    <div class="col-md-6">{{ form.company_legal_name.label_tag }} {{ form.company_legal_name }}</div>
+    <div class="col-md-6">{{ form.company_trade_name.label_tag }} {{ form.company_trade_name }}</div>
+    <div class="col-md-3">{{ form.kvk_number.label_tag }} {{ form.kvk_number }}</div>
+    <div class="col-md-3">{{ form.vat_number.label_tag }} {{ form.vat_number }}</div>
+  </div>
+</div>
+
+<div class="card mb-3 shadow-sm">
+  <div class="card-header fw-bold">Vestigingsadres & postadres</div>
+  <div class="card-body row g-3">
+    <div class="col-12"><strong>Vestigingsadres</strong></div>
+    <div class="col-md-6">{{ form.reg_address.label_tag }} {{ form.reg_address }}</div>
+    <div class="col-md-2">{{ form.reg_postcode.label_tag }} {{ form.reg_postcode }}</div>
+    <div class="col-md-2">{{ form.reg_city.label_tag }} {{ form.reg_city }}</div>
+    <div class="col-md-2">{{ form.reg_province.label_tag }} {{ form.reg_province }}</div>
+    <div class="col-12"><hr class="my-2"><strong>Postadres</strong></div>
+    <div class="col-md-6">{{ form.post_address.label_tag }} {{ form.post_address }}</div>
+    <div class="col-md-2">{{ form.post_postcode.label_tag }} {{ form.post_postcode }}</div>
+    <div class="col-md-2">{{ form.post_city.label_tag }} {{ form.post_city }}</div>
+    <div class="col-md-2">{{ form.post_province.label_tag }} {{ form.post_province }}</div>
+  </div>
+</div>
+
+<div class="card mb-3 shadow-sm">
+  <div class="card-header fw-bold">Contact & locaties</div>
+  <div class="card-body row g-3">
+    <div class="col-md-4">{{ form.primary_email.label_tag }} {{ form.primary_email }}</div>
+    <div class="col-md-4">{{ form.primary_phone.label_tag }} {{ form.primary_phone }}</div>
+    <div class="col-md-4">{{ form.website.label_tag }} {{ form.website }}</div>
+    <div class="col-md-6">{{ form.hq_opening_hours.label_tag }} {{ form.hq_opening_hours }}</div>
+    <div class="col-12">{{ form.extra_branches.label_tag }} {{ form.extra_branches }}</div>
+    <div class="col-12">{{ form.lead_contacts.label_tag }} {{ form.lead_contacts }}</div>
+  </div>
+</div>
+
+<div class="card mb-3 shadow-sm">
+  <div class="card-header fw-bold">Branding</div>
+  <div class="card-body row g-3">
+    <div class="col-md-6">{{ form.logo.label_tag }} {{ form.logo }}</div>
+    <div class="col-md-6">{{ form.cover.label_tag }} {{ form.cover }}</div>
+    <div class="col-md-4">{{ form.brand_primary_color.label_tag }} {{ form.brand_primary_color }}</div>
+    <div class="col-md-4">{{ form.brand_secondary_color.label_tag }} {{ form.brand_secondary_color }}</div>
+    <div class="col-md-4">{{ form.brand_accent_color.label_tag }} {{ form.brand_accent_color }}</div>
+    <div class="col-12">{{ form.bio.label_tag }} {{ form.bio }}</div>
+    <div class="col-12">{{ form.brand_style.label_tag }} {{ form.brand_style }}</div>
+    <div class="col-md-4">{{ form.linkedin_url.label_tag }} {{ form.linkedin_url }}</div>
+    <div class="col-md-4">{{ form.facebook_url.label_tag }} {{ form.facebook_url }}</div>
+    <div class="col-md-4">{{ form.instagram_url.label_tag }} {{ form.instagram_url }}</div>
+    <div class="col-12 form-check mt-2">{{ form.published }} <label class="form-check-label ms-1" for="{{ form.published.id_for_label }}">Publiek zichtbaar</label></div>
+  </div>
+</div>
