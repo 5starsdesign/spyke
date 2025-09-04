@@ -1,0 +1,67 @@
+{% load static %}
+<footer class="site-footer mt-5">
+  <div class="container py-5">
+    <div class="row g-4">
+      <div class="col-12 col-lg-4">
+  <a href="/" class="d-inline-flex align-items-center mb-3">
+    <img src="{% static 'img/logo.svg' %}" alt="Woningruil" height="40">
+  </a>
+  <p class="mb-3 small text-muted">
+    Platform voor woningruil, huur en koop. Eenvoudig zoeken, veilig contact, premium voor volledige details.
+  </p>
+  <div class="d-flex gap-3 small">
+    <a class="link-underline" href="/over/">Over</a>
+    <a class="link-underline" href="/contact/">Contact</a>
+    <a class="link-underline" href="/faq/">FAQ</a>
+  </div>
+</div>
+
+      <div class="col-6 col-lg-2">
+        <h6 class="text-uppercase fw-semibold mb-3">Woningen</h6>
+        <ul class="list-unstyled small">
+          <li><a href="/ruilwoningen/" class="link-underline">Ruilwoningen</a></li>
+          <li><a href="/huurwoningen/" class="link-underline">Huurwoningen</a></li>
+          <li><a href="/koopwoningen/" class="link-underline">Koopwoningen</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h6 class="text-uppercase fw-semibold mb-3">Snel naar</h6>
+        <ul class="list-unstyled small">
+          <li><a href="/accounts/signup/" class="link-underline">Account maken</a></li>
+          <li><a href="/accounts/login/" class="link-underline">Inloggen</a></li>
+          <li><a href="/dash/member/" class="link-underline">Mijn dashboard</a></li>
+        </ul>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <h6 class="text-uppercase fw-semibold mb-3">Nieuwsbrief</h6>
+        <form action="/nieuwsbrief/inschrijven/" method="post" class="footer-newsletter">
+  {% csrf_token %}
+  <div class="input-group">
+    <input type="email" name="email" required class="form-control" placeholder="E-mailadres">
+    <button class="btn btn-primary" type="submit">Inschrijven</button>
+  </div>
+</form>
+
+        <div class="small mt-3">
+          <span class="me-2">Volg ons:</span>
+          <a href="https://www.linkedin.com" class="link-underline me-3">LinkedIn</a>
+          <a href="https://www.instagram.com" class="link-underline me-3">Instagram</a>
+          <a href="https://www.facebook.com" class="link-underline">Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center small">
+      <div class="text-muted">&copy; {% now "Y" %} Woningruil · Alle rechten voorbehouden</div>
+      <div class="mt-2 mt-sm-0 d-flex gap-3">
+        <a href="/privacy/" class="link-underline">Privacy</a>
+        <a href="/voorwaarden/" class="link-underline">Voorwaarden</a>
+        <a href="/cookies/" class="link-underline">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>

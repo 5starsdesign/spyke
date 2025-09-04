@@ -1,0 +1,130 @@
+{% extends "dash/_layout.html" %}
+{% load static %}
+
+{% block sidebar %}
+  {% include "dash/_sidebar_member.html" with active="profiel" %}
+{% endblock %}
+
+{% block dash_content %}
+<h1 class="mb-3">Mijn profiel</h1>
+
+{% if edit_mode %}
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Account (alleen-lezen)</div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Gebruikersnaam</label>
+          <input class="form-control" value="{{ request.user.username }}" disabled>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Naam</label>
+          <input class="form-control" value="{{ request.user.get_full_name|default:request.user.username }}" disabled>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">E-mail</label>
+          <input class="form-control" value="{{ request.user.email }}" disabled>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Profiel</div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3 text-center">
+          {% if profile.avatar %}
+            <img class="img-fluid rounded mb-2" src="{{ profile.avatar.url }}" alt="Profielfoto">
+          {% else %}
+            <div class="border rounded mb-2 p-4 text-muted">Geen foto</div>
+          {% endif %}
+          <label class="form-label" for="{{ form.avatar.id_for_label }}">{{ form.avatar.label }}</label>
+          {{ form.avatar }} {{ form.avatar.errors }}
+        </div>
+        <div class="col-md-9">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
+              {{ form.address }} {{ form.address.errors }}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="{{ form.postcode.id_for_label }}">{{ form.postcode.label }}</label>
+              {{ form.postcode }} {{ form.postcode.errors }}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+              {{ form.city }} {{ form.city.errors }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="{{ form.province.id_for_label }}">{{ form.province.label }}</label>
+              {{ form.province }} {{ form.province.errors }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Opslaan</button>
+    <a class="btn btn-outline-secondary" href="{% url 'member_profile' %}">Annuleren</a>
+    {% if has_password %}
+      <a class="btn btn-warning ms-auto" href="{% url 'account_change_password' %}">Wachtwoord wijzigen</a>
+    {% else %}
+      <a class="btn btn-warning ms-auto" href="{% url 'account_set_password' %}">Wachtwoord instellen</a>
+    {% endif %}
+  </div>
+</form>
+
+{% else %}
+<div class="row g-3">
+  <div class="col-md-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center">
+        {% if profile.avatar %}
+          <img class="img-fluid rounded mb-2" src="{{ profile.avatar.url }}" alt="Profielfoto">
+        {% else %}
+          <div class="border rounded mb-2 p-4 text-muted">Geen foto</div>
+        {% endif %}
+        <div class="small text-muted">{{ request.user.get_full_name|default:request.user.username }}</div>
+        <div class="small">{{ request.user.email }}</div>
+        {% if profile.is_premium %}
+          <span class="badge bg-success mt-2">Premium</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">Gegevens</div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6"><strong>Gebruikersnaam:</strong> {{ request.user.username }}</div>
+          <div class="col-md-6"><strong>Naam:</strong> {{ request.user.get_full_name|default:"-" }}</div>
+          <div class="col-md-6"><strong>E-mail:</strong> {{ request.user.email }}</div>
+          <div class="col-md-6"><strong>Adres:</strong> {{ profile.address|default:"-" }}</div>
+          <div class="col-md-3"><strong>Postcode:</strong> {{ profile.postcode|default:"-" }}</div>
+          <div class="col-md-3"><strong>Plaats:</strong> {{ profile.city|default:"-" }}</div>
+          <div class="col-md-3"><strong>Provincie:</strong> {{ profile.province|default:"-" }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex gap-2 mt-3">
+      <a class="btn btn-secondary" href="{% url 'member_profile' %}?edit=1">Bewerk profiel</a>
+      {% if has_password %}
+        <a class="btn btn-warning ms-auto" href="{% url 'account_change_password' %}">Wachtwoord wijzigen</a>
+      {% else %}
+        <a class="btn btn-warning ms-auto" href="{% url 'account_set_password' %}">Wachtwoord instellen</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

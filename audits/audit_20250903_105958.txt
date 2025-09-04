@@ -1,0 +1,246 @@
+
+▶ docker compose up -d --build
+#1 [internal] load local bake definitions
+#1 reading from stdin 491B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 526B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.12-slim
+#3 DONE 10.8s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 163B done
+#4 DONE 0.0s
+
+#5 [1/8] FROM docker.io/library/python:3.12-slim@sha256:d67a7b66b989ad6b6d6b10d428dcc5e0bfc3e5f88906e67d490c4d3daac57047
+#5 resolve docker.io/library/python:3.12-slim@sha256:d67a7b66b989ad6b6d6b10d428dcc5e0bfc3e5f88906e67d490c4d3daac57047 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 68B done
+#6 DONE 0.0s
+
+#7 [2/8] RUN apt-get update && apt-get install -y --no-install-recommends       ca-certificates     && rm -rf /var/lib/apt/lists/*
+#7 CACHED
+
+#8 [7/8] COPY startup.sh /app/startup.sh
+#8 CACHED
+
+#9 [4/8] WORKDIR /app
+#9 CACHED
+
+#10 [5/8] COPY requirements.txt /app/
+#10 CACHED
+
+#11 [6/8] RUN python -m pip install --upgrade pip &&     pip install --no-cache-dir -r requirements.txt
+#11 CACHED
+
+#12 [3/8] RUN useradd -ms /bin/bash appuser
+#12 CACHED
+
+#13 [8/8] RUN chmod +x /app/startup.sh
+#13 CACHED
+
+#14 exporting to image
+#14 exporting layers done
+#14 exporting manifest sha256:7426ed95a62986d59bb79e90280a054497d5d1b6cbbd9136a41cd42278e8cb9e done
+#14 exporting config sha256:bc0e8cf25fd20e65a83fb2670b6933253be40d81abf508d5d3a3dfe2bd95f806 done
+#14 exporting attestation manifest sha256:2b894499db75274c6d6dc6efc98ca19bad8f092aeae35d2f4c020580352f0b01 0.0s done
+#14 exporting manifest list sha256:0891c70eb7dcd6be6f2682628890b214a0159ec56b5ac62bb679a8e2baabdaed
+#14 exporting manifest list sha256:0891c70eb7dcd6be6f2682628890b214a0159ec56b5ac62bb679a8e2baabdaed 0.0s done
+#14 naming to docker.io/library/woningruil-web:latest done
+#14 unpacking to docker.io/library/woningruil-web:latest 0.0s done
+#14 DONE 0.1s
+
+#15 resolving provenance for metadata file
+#15 DONE 0.0s
+ woningruil-web  Built
+ Container woningruil-db-1  Running
+ Container woningruil-web-1  Recreate
+ Container woningruil-web-1  Recreated
+ Container woningruil-db-1  Waiting
+ Container woningruil-db-1  Healthy
+ Container woningruil-web-1  Starting
+ Container woningruil-web-1  Started
+
+▶ docker compose exec -T web python manage.py makemigrations --check --dry-run || true
+No changes detected
+
+▶ docker compose exec -T web python manage.py migrate
+Operations to perform:
+  Apply all migrations: account, accounts, admin, auth, contenttypes, properties, sessions, sites, socialaccount
+Running migrations:
+  No migrations to apply.
+
+▶ docker compose exec -T web python manage.py showmigrations
+account
+ [X] 0001_initial
+ [X] 0002_email_max_length
+ [X] 0003_alter_emailaddress_create_unique_verified_email
+ [X] 0004_alter_emailaddress_drop_unique_email
+ [X] 0005_emailaddress_idx_upper_email
+ [X] 0006_emailaddress_lower
+ [X] 0007_emailaddress_idx_email
+ [X] 0008_emailaddress_unique_primary_email_fixup
+ [X] 0009_emailaddress_unique_primary_email
+accounts
+ [X] 0001_initial
+ [X] 0002_remove_profile_bio_remove_profile_company_name_and_more
+ [X] 0003_alter_profile_city_alter_profile_province_and_more
+ [X] 0004_profile_premium
+ [X] 0005_alter_profile_city_alter_profile_premium_and_more
+admin
+ [X] 0001_initial
+ [X] 0002_logentry_remove_auto_add
+ [X] 0003_logentry_add_action_flag_choices
+auth
+ [X] 0001_initial
+ [X] 0002_alter_permission_name_max_length
+ [X] 0003_alter_user_email_max_length
+ [X] 0004_alter_user_username_opts
+ [X] 0005_alter_user_last_login_null
+ [X] 0006_require_contenttypes_0002
+ [X] 0007_alter_validators_add_error_messages
+ [X] 0008_alter_user_username_max_length
+ [X] 0009_alter_user_last_name_max_length
+ [X] 0010_alter_group_name_max_length
+ [X] 0011_update_proxy_permissions
+ [X] 0012_alter_user_first_name_max_length
+contenttypes
+ [X] 0001_initial
+ [X] 0002_remove_content_type_name
+properties
+ [X] 0001_initial
+ [X] 0002_wish
+ [X] 0003_alter_exchangeoffer_options_and_more
+ [X] 0004_exchangeoffer_my_address_exchangeoffer_my_bedrooms_and_more
+ [X] 0005_exchangeoffer_my_cover
+ [X] 0006_wish_tenure_wish_want_balcony_wish_want_garage_and_more
+ [X] 0007_remove_wish_tenure_alter_wish_price_alter_wish_type
+ [X] 0008_alter_exchangeoffer_options_and_more
+ [X] 0009_exchangeoffer_created_at_exchangeoffer_updated_at
+ [X] 0010_marketlisting_is_featured_marketlisting_is_published
+sessions
+ [X] 0001_initial
+sites
+ [X] 0001_initial
+ [X] 0002_alter_domain_unique
+socialaccount
+ [X] 0001_initial
+ [X] 0002_token_max_lengths
+ [X] 0003_extra_data_default_dict
+ [X] 0004_app_provider_id_settings
+ [X] 0005_socialtoken_nullable_app
+ [X] 0006_alter_socialaccount_extra_data
+
+▶ docker compose exec -T web python manage.py check --fail-level ERROR
+System check identified no issues (0 silenced).
+
+▶ docker compose exec -T web python manage.py check --deploy || true
+System check identified some issues:
+
+WARNINGS:
+?: (security.W004) You have not set a value for the SECURE_HSTS_SECONDS setting. If your entire site is served only over SSL, you may want to consider setting a value and enabling HTTP Strict Transport Security. Be sure to read the documentation first; enabling HSTS carelessly can cause serious, irreversible problems.
+?: (security.W008) Your SECURE_SSL_REDIRECT setting is not set to True. Unless your site should be available over both SSL and non-SSL connections, you may want to either set this setting True or configure a load balancer or reverse-proxy server to redirect all connections to HTTPS.
+?: (security.W012) SESSION_COOKIE_SECURE is not set to True. Using a secure-only session cookie makes it more difficult for network traffic sniffers to hijack user sessions.
+?: (security.W016) You have 'django.middleware.csrf.CsrfViewMiddleware' in your MIDDLEWARE, but you have not set CSRF_COOKIE_SECURE to True. Using a secure-only CSRF cookie makes it more difficult for network traffic sniffers to steal the CSRF token.
+?: (security.W018) You should not have DEBUG set to True in deployment.
+
+System check identified 5 issues (0 silenced).
+
+▶ docker compose exec -T web python manage.py collectstatic --noinput || true
+
+0 static files copied to '/app/staticfiles', 135 unmodified.
+
+▶ docker compose exec -T web bash -lc 'python manage.py shell <<"PY"
+from django.test import Client
+from django.urls import get_resolver, reverse, NoReverseMatch
+
+paths = ["/","/ruilwoningen/","/huurwoningen/","/koopwoningen/",
+         "/accounts/","/accounts/login/","/accounts/signup/",
+         "/dash/member/eigen/","/dash/member/wens/",
+         "/dash/agency/mijn/","/dash/agency/nieuw/"]
+
+resolver = get_resolver()
+for name in sorted(k for k in resolver.reverse_dict.keys() if isinstance(k,str)):
+    try:
+        url = reverse(name)
+        if url not in paths: paths.append(url)
+    except NoReverseMatch:
+        pass
+
+client = Client()
+print("== Route smoke test (HTTP_HOST=localhost) ==")
+ok = {200,301,302}
+for p in paths:
+    try:
+        r = client.get(p, HTTP_HOST="localhost")
+        status = "PASS" if r.status_code in ok else ("WARN" if r.status_code<500 else "FAIL")
+        print(f"{status:4} {r.status_code:3}  {p}")
+    except Exception as e:
+        print(f"FAIL EXC   {p}  {e}")
+
+print("
+== Modelvelden ==")
+def fields(model): return ", ".join(sorted(f.name for f in model._meta.fields))
+try:
+    from properties.models import MarketListing
+    print("MarketListing:", fields(MarketListing))
+except Exception as e:
+    print("MarketListing: ERROR:", e)
+try:
+    from properties.models import ExchangeOffer
+    print("ExchangeOffer:", fields(ExchangeOffer))
+except Exception as e:
+    print("ExchangeOffer: ERROR:", e)
+PY'
+== Route smoke test (HTTP_HOST=localhost) ==
+PASS 200  /
+PASS 302  /ruilwoningen/
+PASS 302  /huurwoningen/
+PASS 302  /koopwoningen/
+PASS 302  /accounts/
+PASS 200  /accounts/login/
+PASS 200  /accounts/signup/
+PASS 302  /dash/member/eigen/
+PASS 302  /dash/member/wens/
+PASS 302  /dash/agency/mijn/
+PASS 302  /dash/agency/nieuw/
+PASS 302  /accounts/password/change/
+PASS 302  /accounts/email/
+PASS 200  /accounts/confirm-email/
+PASS 200  /accounts/inactive/
+PASS 302  /accounts/logout/
+PASS 302  /accounts/reauthenticate/
+PASS 200  /accounts/password/reset/
+PASS 200  /accounts/password/reset/done/
+PASS 200  /accounts/password/reset/key/done/
+PASS 302  /accounts/password/set/
+PASS 302  /dash/agency/profiel/
+PASS 200  /accounts/google/login/callback/
+PASS 200  /accounts/google/login/
+PASS 200  /accounts/google/login/token/
+PASS 302  /makelaar/
+PASS 302  /makelaar/huurwoningen/
+PASS 302  /makelaar/koopwoningen/
+PASS 302  /dash/member/
+PASS 302  /dash/member/matches/
+PASS 302  /dash/member/eigen/overzicht/
+PASS 302  /dash/member/profiel/
+PASS 302  /dash/member/wens/overzicht/
+PASS 302  /dash/owner/
+PASS 302  /dash/owner/mijn/
+PASS 302  /dash/owner/nieuw/
+PASS 302  /dash/owner/profiel/
+PASS 302  /makelaar/ruilwoningen/
+PASS 302  /accounts/3rdparty/
+PASS 200  /accounts/3rdparty/login/cancelled/
+PASS 200  /accounts/3rdparty/login/error/
+PASS 302  /accounts/3rdparty/signup/
+
+== Modelvelden ==
+MarketListing: address, available_from, balcony, bathrooms, bedrooms, build_year, city, created_at, deposit, description, elevator, energy_label, finish, floors, garden, heat_pump, id, is_featured, is_published, listing_kind, living_area, lot_area, new_build, owner, parking_garage, parking_spot, pets_allowed, postcode, price, property_type, province, rental_term, roof_terrace, rooms, service_costs, shed, slug, smoking_allowed, solar_panels, storage, suitable_for, terrace, title, updated_at, wheelchair_accessible
+ExchangeOffer: created_at, id, is_published, member, my_address, my_attic, my_balcony, my_bedrooms, my_cellar, my_city, my_cover, my_description, my_floor, my_floorplan, my_floors, my_garden, my_living_area, my_near_schools, my_near_shops, my_ov, my_parking_garage, my_parking_private, my_parking_street, my_postcode, my_price, my_property_type, my_province, my_rent, my_rooms, my_storage, my_tenure, my_terrace, my_title, new_build, pets_allowed, shed, updated_at, want_attic, want_balcony, want_cellar, want_city, want_garden, want_min_area, want_min_rooms, want_ov, want_parking_private, want_property_type, want_storage, want_terrace, wheelchair

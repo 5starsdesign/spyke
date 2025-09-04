@@ -1,0 +1,27 @@
+{% extends "dash/_layout.html" %}
+{% block sidebar %}{% include "dash/_sidebar_owner.html" with active="mijn" %}{% endblock %}
+{% block dash_content %}
+<h1 class="mb-3">Mijn woningen</h1>
+<a class="btn btn-primary mb-3" href="{% url 'owner_new' %}">+ Nieuwe woning</a>
+{% if listings %}
+  <div class="row g-3">
+    {% for l in listings %}
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title mb-1">{{ l.title }}</h5>
+            <div class="text-muted small mb-2">{{ l.city }} • {{ l.get_listing_kind_display }}</div>
+            <div class="small">Oppervlakte: {{ l.living_area }} m² • Kamers: {{ l.rooms }}</div>
+          </div>
+          <div class="card-footer d-flex gap-2">
+            <a class="btn btn-sm btn-outline-primary" href="{{ l.detail_url }}" target="_blank">Bekijken</a>
+            <a class="btn btn-sm btn-primary" href="{% url 'owner_listing_edit' slug=l.slug %}">Bewerken</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">Je hebt nog geen woningen aangemaakt.</div>
+{% endif %}
+{% endblock %}

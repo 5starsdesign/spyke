@@ -1,0 +1,88 @@
+/* --- Palet --- */
+:root{
+  --bs-primary:#CC992C;            /* goud */
+  --bs-secondary:#2c7a7b;          /* koel blauwgroen */
+  --bs-light:#faf9f6;              /* neutrale body */
+  --bs-dark:#2f2f2f;               /* antraciet */
+  --header-bg:#2f2f2f;             /* header achtergrond */
+  --highlight:#a3be8c;             /* zachte highlight */
+}
+/* Body */
+body{background-color:var(--bs-light);color:var(--bs-dark);}
+section,.hero{background-color:var(--bs-light);}
+
+/* Links */
+a,.link-primary{color:var(--bs-primary);}
+a:hover,.link-primary:hover{color:#a67a23;}
+
+/* Buttons */
+.btn-primary{
+  --bs-btn-bg:#CC992C;--bs-btn-border-color:#CC992C;
+  --bs-btn-hover-bg:#a67a23;--bs-btn-hover-border-color:#a67a23;
+  --bs-btn-active-bg:#8f6a1d;--bs-btn-active-border-color:#8f6a1d;
+}
+.btn-outline-primary{
+  --bs-btn-color:#CC992C;--bs-btn-border-color:#CC992C;
+  --bs-btn-hover-bg:#CC992C;--bs-btn-hover-border-color:#CC992C;--bs-btn-hover-color:#fff;
+}
+.btn-secondary{
+  --bs-btn-bg:#2c7a7b;--bs-btn-border-color:#2c7a7b;
+  --bs-btn-hover-bg:#245c5d;--bs-btn-hover-border-color:#245c5d;
+}
+
+/* Badges/labels */
+.badge-secondary{background:#2c7a7b;}
+.badge-highlight{background:#a3be8c;color:#2f2f2f;}
+
+/* Navbar – licht met donkere onderlijn */
+.navbar {
+  background:#ffffff !important;   /* wit zodat logo goed zichtbaar blijft */
+  border-bottom:3px solid #2f2f2f; /* vaste donkere lijn */
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link,
+.navbar .navbar-text {
+  color:#2f2f2f !important; /* donkere tekst, goed leesbaar */
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color:var(--bs-primary) !important; /* goud accent bij hover/active */
+}
+
+.navbar .navbar-toggler {
+  border-color:#2f2f2f;
+}
+.navbar .navbar-toggler-icon {
+  filter:none; /* standaard donker icoon */
+}
+
+
+/* Footer subtiel */
+.footer{background:#fff;}
+
+/* Cards & helpers */
+.page-item.active .page-link{background:#CC992C;border-color:#CC992C;}
+.page-link{color:#CC992C;} .page-link:hover{color:#a67a23;}
+
+/* Carousel captions leesbaar op donker */
+.carousel-caption{background:rgba(0,0,0,.35);border-radius:.25rem;padding:1rem;}
+
+/* --- Footer --- */
+.site-footer{background:#fff;border-top:1px solid #e8e8e8;}
+.site-footer .link-underline{color:var(--bs-dark); text-decoration:none; border-bottom:1px solid transparent;}
+.site-footer .link-underline:hover{color:var(--bs-primary); border-bottom-color:var(--bs-primary);}
+.site-footer .form-text{color:#6c757d;}
+
+/* Cookie consent – altijd zichtbaar onderin */
+.cookie-consent{
+  position:fixed; left:0; right:0; bottom:0;
+  z-index:1080; background:#fff;
+  border-top:1px solid #e8e8e8;
+  box-shadow:0 -4px 16px rgba(0,0,0,.08);
+}
+.cookie-consent .btn-outline-secondary{
+  --bs-btn-color:#2f2f2f; --bs-btn-border-color:#2f2f2f;
+}
+

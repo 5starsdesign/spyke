@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- template: agency/public_profile.html -->
+<section class="py-3">
+  <div class="container">
+    <!-- HERO omslag -->
+    <div class="rounded overflow-hidden mb-4 border">
+      <div class="ratio" style="--bs-aspect-ratio:33%;">
+        {% if obj.cover %}<img src="{{ obj.cover.url }}" class="w-100 h-100" style="object-fit:cover" alt="Omslag">
+        {% else %}<img src="{% static 'agency/cover_placeholder.svg' %}" class="w-100 h-100" alt="Omslag placeholder">{% endif %}
+      </div>
+    </div>
+
+    <!-- Kop met logo -->
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <div class="bg-white rounded shadow-sm p-2" style="width:96px;height:96px;display:flex;align-items:center;justify-content:center;">
+        {% if obj.logo %}<img src="{{ obj.logo.url }}" class="img-fluid" alt="Logo">
+        {% else %}<img src="{% static 'agency/logo_placeholder.svg' %}" class="img-fluid" alt="Logo placeholder">{% endif %}
+      </div>
+      <div>
+        <h1 class="h3 mb-1">{{ obj.company_trade_name|default:obj.company_legal_name }}</h1>
+        {% if obj.bio %}<div class="text-muted">{{ obj.bio }}</div>{% endif %}
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="card"><div class="card-body">
+          <p class="mb-1"><strong>KVK:</strong> {{ obj.kvk_number|default:"-" }}</p>
+          <p class="mb-1"><strong>BTW:</strong> {{ obj.vat_number|default:"-" }}</p>
+          <p class="mb-1"><strong>Telefoon:</strong> {{ obj.primary_phone|default:"-" }}</p>
+          <p class="mb-1"><strong>E-mail:</strong> {{ obj.primary_email|default:"-" }}</p>
+          <p class="mb-0"><strong>Website:</strong> {% if obj.website %}<a href="{{ obj.website }}" target="_blank" rel="noopener">{{ obj.website }}</a>{% else %}-{% endif %}</p>
+        </div></div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-3"><div class="card-header fw-bold">Hoofdkantoor</div><div class="card-body">
+          <p class="mb-1">{{ obj.reg_address|default:"-" }}</p>
+          <p class="mb-1">{{ obj.reg_postcode }} {{ obj.reg_city }} {{ obj.reg_province }}</p>
+          {% if obj.hq_opening_hours %}<small class="text-muted">Openingstijden: {{ obj.hq_opening_hours }}</small>{% endif %}
+        </div></div>
+
+        {% if obj.extra_branches %}
+        <div class="card mb-3"><div class="card-header fw-bold">Vestigingen</div><div class="card-body"><pre class="mb-0 small">{{ obj.extra_branches }}</pre></div></div>
+        {% endif %}
+
+        <div class="card"><div class="card-header fw-bold">Social</div><div class="card-body d-flex gap-3">
+          {% if obj.linkedin_url %}<a href="{{ obj.linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>{% endif %}
+          {% if obj.facebook_url %}<a href="{{ obj.facebook_url }}" target="_blank" rel="noopener">Facebook</a>{% endif %}
+          {% if obj.instagram_url %}<a href="{{ obj.instagram_url }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+          {% if not obj.linkedin_url and not obj.facebook_url and not obj.instagram_url %}
+            <span class="text-muted">Geen social links</span>
+          {% endif %}
+        </div></div>
+      </div>
+    </div>
+
+    <!-- Debug regels tonen het exacte pad/URL -->
+    <div class="small text-muted mt-3">
+      Logo: {% if obj.logo %}{{ obj.logo.url }}{% else %}placeholder{% endif %} |
+      Cover: {% if obj.cover %}{{ obj.cover.url }}{% else %}placeholder{% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

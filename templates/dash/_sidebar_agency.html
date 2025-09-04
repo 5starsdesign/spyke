@@ -1,0 +1,6 @@
+<div class="list-group">
+  <a href="{% url 'agency_home' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/agency/mijn/' %}active{% endif %}">Mijn woningen</a>
+  <a href="{% url 'agency_new' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/agency/nieuw/' %}active{% endif %}">Nieuwe woning</a>
+  <a href="{% url 'agency_profile' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/agency/profiel/' %}active{% endif %}">Mijn profiel</a>
+  <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action">Uitloggen</a>
+</div>

@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Makelaar · {{ profile.company_name|default:profile.display_name }}{% endblock %}{% block content %}
+<h3>{{ profile.company_name|default:profile.display_name }}</h3>
+<p class="text-muted small">{{ profile.address }} {{ profile.city }} · {{ profile.phone }}</p>
+<div class="row row-cols-1 row-cols-md-3 g-3">
+  {% for l in items %}
+  <div class="col"><div class="card h-100">
+    {% with img=l.marketlistingimage_set.first %}{% if img %}<img src="{{ img.image.url }}" class="card-img-top">{% endif %}{% endwith %}
+    <div class="card-body"><h6 class="card-title">{{ l.title }}</h6><div class="small text-muted">{{ l.city }} · {{ l.get_property_type_display }}</div></div>
+    <div class="card-footer bg-white">
+      {% if l.listing_kind == "HUUR" %}<a class="btn btn-primary w-100" href="/woningen/huur/{{ l.slug }}/">Details</a>
+      {% else %}<a class="btn btn-primary w-100" href="/woningen/koop/{{ l.slug }}/">Details</a>{% endif %}
+    </div>
+  </div></div>
+  {% endfor %}
+</div>
+{% endblock %}

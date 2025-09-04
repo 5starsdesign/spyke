@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load account socialaccount socialapp_tags %}
+{% block title %}Inloggen{% endblock %}
+{% block content %}
+<h3>Inloggen</h3>
+<form method="post" action="{% url 'account_login' %}">{% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary">Inloggen</button>
+</form>
+
+<hr>
+{% has_socialapp 'google' as google_ok %}
+{% if google_ok %}
+  <a class="btn btn-outline-secondary mt-2" href="{% provider_login_url 'google' %}">Login met Google</a>
+{% else %}
+  <p class="text-muted mt-2 small">Google login wordt geactiveerd zodra de Google app-gegevens zijn ingesteld.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,50 @@
+/* Primary (goud) */
+:root {
+  --bs-primary: #CC992C;
+  --bs-secondary: #2c7a7b;   /* koel blauwgroen accent */
+  --bs-light: #faf9f6;       /* neutrale achtergrond */
+  --bs-dark: #2f2f2f;        /* antraciet voor tekst/header */
+}
+
+/* Body achtergrond en tekst */
+body {
+  background-color: var(--bs-light);
+  color: var(--bs-dark);
+}
+
+/* Hero/sections */
+.hero, section {
+  background-color: var(--bs-light);
+}
+
+/* Buttons */
+.btn-primary {
+  --bs-btn-bg:#CC992C; --bs-btn-border-color:#CC992C;
+  --bs-btn-hover-bg:#a67a23; --bs-btn-hover-border-color:#a67a23;
+  --bs-btn-active-bg:#8f6a1d; --bs-btn-active-border-color:#8f6a1d;
+}
+
+.btn-outline-primary {
+  --bs-btn-color:#CC992C; --bs-btn-border-color:#CC992C;
+  --bs-btn-hover-bg:#CC992C; --bs-btn-hover-border-color:#CC992C; --bs-btn-hover-color:#fff;
+}
+
+/* Secondary buttons / accenten */
+.btn-secondary {
+  --bs-btn-bg:#2c7a7b; --bs-btn-border-color:#2c7a7b;
+  --bs-btn-hover-bg:#245c5d; --bs-btn-hover-border-color:#245c5d;
+}
+
+.badge-secondary {
+  background-color:#2c7a7b;
+}
+
+/* Highlight kleur voor zachte tags of badges */
+.badge-highlight {
+  background-color:#a3be8c; /* of #d9c7a1 */
+  color:#2f2f2f;
+}
+
+/* Links */
+a { color: var(--bs-primary); }
+a:hover { color: #a67a23; }

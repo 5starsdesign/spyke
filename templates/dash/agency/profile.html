@@ -1,0 +1,94 @@
+{% extends "dash/_layout.html" %}
+{% load static %}
+{% block sidebar %}{% include "dash/_sidebar_agency.html" with active="profiel" %}{% endblock %}
+{% block dash_content %}
+<h1 class="mb-3">Account & organisatie</h1>
+
+{% if not editing %}
+  <div class="mb-3">
+    <a class="btn btn-primary" href="?edit=1">Bewerk profiel</a>
+    {% if obj.slug %}<a class="btn btn-outline-secondary" target="_blank" href="{% url 'agency_public_profile' slug=obj.slug %}">Bekijk publieke pagina</a>{% endif %}
+  </div>
+{% endif %}
+
+<div class="row g-3">
+  <div class="col-lg-8">
+    {% if not editing %}
+      <div class="card mb-3 shadow-sm">
+        <div class="card-header fw-bold">Bedrijfsgegevens</div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Juridische naam</dt><dd class="col-sm-8">{{ obj.company_legal_name|default:"-" }}</dd>
+            <dt class="col-sm-4">Handelsnaam</dt><dd class="col-sm-8">{{ obj.company_trade_name|default:"-" }}</dd>
+            <dt class="col-sm-4">KVK</dt><dd class="col-sm-8">{{ obj.kvk_number|default:"-" }}</dd>
+            <dt class="col-sm-4">BTW</dt><dd class="col-sm-8">{{ obj.vat_number|default:"-" }}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="card mb-3 shadow-sm">
+        <div class="card-header fw-bold">Contact & locaties</div>
+        <div class="card-body">
+          <p class="mb-2"><strong>Hoofdkantoor</strong><br>
+            {{ obj.reg_address|default:"-" }}, {{ obj.reg_postcode }} {{ obj.reg_city }} {{ obj.reg_province }}<br>
+            <small>Openingstijden: {{ obj.hq_opening_hours|default:"-" }}</small>
+          </p>
+          {% if obj.extra_branches %}
+            <hr class="my-2">
+            <div><strong>Extra vestigingen</strong><pre class="mb-0 small">{{ obj.extra_branches }}</pre></div>
+          {% endif %}
+          {% if obj.lead_contacts %}
+            <hr class="my-2">
+            <div><strong>Contactpersonen voor leads</strong><pre class="mb-0 small">{{ obj.lead_contacts }}</pre></div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card mb-3 shadow-sm">
+        <div class="card-header fw-bold">Online & socials</div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Primair e-mail</dt><dd class="col-sm-8">{{ obj.primary_email|default:"-" }}</dd>
+            <dt class="col-sm-4">Telefoon</dt><dd class="col-sm-8">{{ obj.primary_phone|default:"-" }}</dd>
+            <dt class="col-sm-4">Website</dt><dd class="col-sm-8"><a href="{{ obj.website }}" target="_blank">{{ obj.website|default:"-" }}</a></dd>
+            <dt class="col-sm-4">LinkedIn</dt><dd class="col-sm-8"><a href="{{ obj.linkedin_url }}" target="_blank">{{ obj.linkedin_url|default:"-" }}</a></dd>
+            <dt class="col-sm-4">Facebook</dt><dd class="col-sm-8"><a href="{{ obj.facebook_url }}" target="_blank">{{ obj.facebook_url|default:"-" }}</a></dd>
+            <dt class="col-sm-4">Instagram</dt><dd class="col-sm-8"><a href="{{ obj.instagram_url }}" target="_blank">{{ obj.instagram_url|default:"-" }}</a></dd>
+          </dl>
+        </div>
+      </div>
+    {% else %}
+      <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        {% include "dash/agency/_profile_form_fields.html" with form=form %}
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" type="submit">Opslaan</button>
+          <a class="btn btn-outline-secondary" href="{% url 'agency_profile' %}">Annuleren</a>
+        </div>
+      </form>
+    {% endif %}
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card mb-3 shadow-sm">
+      <div class="card-header fw-bold">Media</div>
+      <div class="card-body">
+        <div class="mb-3">
+          {% if obj.logo %}<img class="img-fluid" src="{{ obj.logo.url }}" alt="Logo">
+            <div class="small text-muted">{{ obj.logo.url }}</div>
+          {% else %}<img class="img-fluid" src="{% static 'agency/logo_placeholder.svg' %}" alt="Logo placeholder">
+            <div class="text-muted small">Geen logo geüpload</div>
+          {% endif %}
+        </div>
+        <div>
+          {% if obj.cover %}<img class="img-fluid rounded" src="{{ obj.cover.url }}" alt="Omslag">
+            <div class="small text-muted">{{ obj.cover.url }}</div>
+          {% else %}<img class="img-fluid rounded" src="{% static 'agency/cover_placeholder.svg' %}" alt="Omslag placeholder">
+            <div class="text-muted small">Geen omslag geüpload</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

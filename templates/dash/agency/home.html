@@ -1,0 +1,40 @@
+{% extends "dash/_layout.html" %}
+{% block sidebar %}{% include "dash/_sidebar_agency.html" with active="mijn" %}{% endblock %}
+{% block dash_content %}
+<h1 class="mb-3">Mijn woningen</h1>
+
+<form class="mb-3" method="get">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Zoek op titel/adres/plaats/postcode…" name="q" value="{{ q }}">
+    <button class="btn btn-outline-secondary" type="submit">Zoeken</button>
+    <a class="btn btn-primary" href="{% url 'agency_new' %}">Nieuwe woning</a>
+  </div>
+</form>
+
+{% if listings %}
+<div class="table-responsive">
+  <table class="table table-sm align-middle">
+    <thead>
+      <tr>
+        <th>Titel/adres</th><th>Soort</th><th>Plaats</th><th>Prijs</th><th>m²</th><th>Kamers</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in listings %}
+      <tr>
+        <td class="text-truncate" style="max-width:300px;">{{ l.title|default:l.address }}</td>
+        <td>{{ l.get_listing_kind_display }}</td>
+        <td>{{ l.city }}</td>
+        <td>€ {{ l.price }}</td>
+        <td>{{ l.living_area }}</td>
+        <td>{{ l.rooms }}</td>
+        <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{% url 'agency_listing_edit' slug=l.slug %}">Bewerken</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info">Nog geen woningen. <a href="{% url 'agency_new' %}">Voeg je eerste woning toe</a>.</div>
+{% endif %}
+{% endblock %}

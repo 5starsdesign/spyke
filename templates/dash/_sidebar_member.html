@@ -1,0 +1,7 @@
+<div class="list-group">
+  <a href="{% url 'member_profile' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/member/profiel/' %}active{% endif %}">Profiel</a>
+  <a href="{% url 'member_own' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/member/eigen/' %}active{% endif %}">Eigen woning</a>
+  <a href="{% url 'member_wish' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/member/wens/' %}active{% endif %}">Gezochte woning</a>
+  <a href="{% url 'member_matches' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/member/matches/' %}active{% endif %}">Gematchte woningen</a>
+  <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action">Uitloggen</a>
+</div>

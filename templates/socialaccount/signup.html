@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% load account socialaccount %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/auth.css' %}">{% endblock %}
+{% block title %}Rond je registratie af{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <a class="auth-logo" href="/"><img src="{% static 'img/logo.svg' %}" alt="Woningruil"></a>
+  <div class="auth-card">
+    <h1 class="auth-title">Rond je registratie af</h1>
+    <p class="text-muted small mb-3">We hebben je gegevens van {{ account.get_provider.name }} ontvangen. Vul je rol aan om door te gaan.</p>
+    <form method="post" action="{% url 'socialaccount_signup' %}">{% csrf_token %}
+      {{ form.as_p }}
+      <div class="mb-2">
+        <label class="form-label">Ik ben:</label>
+        <select class="form-select" name="role" required>
+          <option value="MEMBER">Lid (woningruil)</option>
+          <option value="AGENCY">Makelaar</option>
+          <option value="OWNER">Huizenbezitter</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-auth w-100">Account aanmaken</button>
+    </form>
+  </div>
+
+  <div class="auth-links">
+    <a href="{% url 'account_login' %}">Toch inloggen met wachtwoord</a>
+  </div>
+</div>
+{% endblock %}

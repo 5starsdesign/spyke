@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Home · Woningruil{% endblock %}
+
+{% block below_nav %}
+  {% include "includes/_slideshow.html" %}
+{% endblock %}
+
+{% block content %}
+  {% include "includes/_hero.html" %}
+
+  <h4 class="mb-3 mt-4">Uitgelichte woningen</h4>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    {% for l in featured %}
+      <div class="col"><div class="card h-100">
+        {% include "includes/_listing_thumb.html" with obj=l %}
+        <div class="card-body">
+          <h6 class="card-title">{{ l.title }}</h6>
+          <div class="small text-muted">{{ l.city }} · {{ l.get_property_type_display }}</div>
+          <div class="mt-2"><small class="text-muted">{{ l.description|truncatewords:16 }}</small></div>
+        </div>
+        <div class="card-footer bg-white">
+          {% if l.listing_kind == "HUUR" %}
+            <a class="btn btn-outline-primary w-100" href="/woningen/huur/{{ l.slug }}/">Bekijk</a>
+          {% else %}
+            <a class="btn btn-outline-primary w-100" href="/woningen/koop/{{ l.slug }}/">Bekijk</a>
+          {% endif %}
+        </div>
+      </div></div>
+    {% empty %}
+      <div class="alert alert-info">Nog geen woningen.</div>
+    {% endfor %}
+  </div>
+{% endblock %}

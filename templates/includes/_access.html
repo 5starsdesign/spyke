@@ -1,0 +1,63 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/locks.css' %}">
+<div id="premium-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Premium toegang</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <p>Neem een premium abonnement om alle adres- en contactgegevens te zien en direct contact op te nemen.</p>
+      <ul class="mb-3">
+        <li>Volledige adresgegevens</li>
+        <li>Contact van aanbieder</li>
+        <li>Geen blur & onbeperkt bekijken</li>
+      </ul>
+      <a class="btn btn-primary" href="/accounts/signup/?plan=premium">Word premium</a>
+    </div>
+  </div></div>
+</div>
+
+<div id="signup-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Account aanmaken</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <p>Maak gratis een account om woningen te bekijken en je profiel op te slaan.</p>
+      <div class="d-flex gap-2">
+        <a class="btn btn-primary" href="/accounts/signup/">Account maken</a>
+        <a class="btn btn-outline-secondary" href="/accounts/login/">Inloggen</a>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<script>
+(function(){
+  // Auto-open signup modal bij ?signup=1
+  const params = new URLSearchParams(location.search);
+  if (params.get("signup") === "1") {
+    window.addEventListener("load", ()=> {
+      const m = document.getElementById("signup-modal");
+      if (window.bootstrap && m) new bootstrap.Modal(m).show();
+    });
+  }
+
+  // Globale helper: lock element met overlay
+  window.applyLock = function(el){
+    if(!el || el.dataset.lockedApplied) return;
+    el.dataset.lockedApplied = "1";
+    el.classList.add("locked");
+    const inner = document.createElement("div");
+    inner.className = "lock-blur";
+    while(el.firstChild) inner.appendChild(el.firstChild);
+    const cover = document.createElement("div");
+    cover.className = "lock-cover";
+    cover.innerHTML = '<div class="lock-msg"><div class="title">Premium nodig</div><button class="btn btn-sm btn-primary">Ontgrendel</button></div>';
+    cover.querySelector("button").addEventListener("click", function(){
+      const m = document.getElementById("premium-modal");
+      if (window.bootstrap && m) new bootstrap.Modal(m).show();
+    });
+    el.appendChild(inner);
+    el.appendChild(cover);
+  };
+})();
+</script>

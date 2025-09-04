@@ -1,0 +1,6 @@
+<div class="list-group">
+  <a href="{% url 'owner_my' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/owner/mijn/' %}active{% endif %}">Mijn woningen</a>
+  <a href="{% url 'owner_new' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/owner/nieuw/' %}active{% endif %}">Nieuwe woning</a>
+  <a href="{% url 'owner_profile' %}" class="list-group-item list-group-item-action {% if request.path == '/dash/owner/profiel/' %}active{% endif %}">Mijn profiel</a>
+  <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action">Uitloggen</a>
+</div>

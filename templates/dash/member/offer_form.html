@@ -1,0 +1,437 @@
+{% extends "dash/_layout.html" %}
+{% load static %}
+{% block sidebar %}{% include "dash/_sidebar_member.html" %}{% endblock %}
+{% block dash_content %}
+
+{% with t=request.GET.tab|default:"eigen" %}
+
+{% if t == "eigen" %}
+  <h3 class="mb-3">Mijn Woning</h3>
+  <form id="woning-form" method="post" enctype="multipart/form-data" class="woning-form">{% csrf_token %}
+    <div id="raw-form" style="display:none">{{ form.as_p }}</div>
+
+    <!-- Top: Provincie + Gemeente -->
+    <div class="woning-card top-row">
+      <div>
+        <label class="form-label">Provincie</label>
+        <select id="provincieSelect" class="form-select"></select>
+      </div>
+      <div>
+        <label class="form-label">Gemeente</label>
+        <select id="gemeenteSelect" class="form-select"><option value="">— Kies gemeente —</option></select>
+      </div>
+    </div>
+
+    <!-- Twee kolommen -->
+    <div class="two-col">
+      <!-- Links -->
+      <div class="woning-card" id="left-block">
+        <h5>Details</h5>
+        <div class="mb-3" id="type_slot"></div>
+        <div class="mb-3" id="huur_slot"></div>
+        <div class="mb-3" id="kamers_slot">
+          <label class="form-label">Aantal kamers</label>
+          <div class="range-wrap">
+            <input id="kamersRange" type="range" min="1" max="10" step="1" class="form-range">
+            <output id="kamersOut">1</output>
+          </div>
+        </div>
+        <div class="mb-3" id="slaapkamers_slot">
+          <label class="form-label">Aantal slaapkamers</label>
+          <div class="range-wrap">
+            <input id="slaapRange" type="range" min="0" max="10" step="1" class="form-range">
+            <output id="slaapOut">0</output>
+          </div>
+        </div>
+        <div class="mb-3" id="opp_slot">
+          <label class="form-label">Oppervlakte (m²)</label>
+          <input id="oppInput" type="number" class="form-control" min="0" step="1" placeholder="m²">
+        </div>
+      </div>
+
+      <!-- Rechts: Foto's -->
+      <div class="woning-card">
+        <h5>Foto's</h5>
+        <div class="gallery">
+          <div class="main" id="mainPhoto"><span class="text-muted">Nog geen foto</span></div>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+        <div class="upload-wrap mt-2">
+          <label for="origFileInput">Foto’s kiezen…</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kenmerken -->
+    <div class="woning-card">
+      <h5>Kenmerken</h5>
+      <div class="features" id="featuresGrid"></div>
+    </div>
+
+    <div class="mt-3">
+      <button class="btn btn-primary">Woning opslaan</button>
+      <a class="btn btn-outline-secondary" href="/dash/member/">Annuleren</a>
+    </div>
+  </form>
+
+  <link rel="stylesheet" href="{% static 'css/woning_form.css' %}">
+  <script>
+  (function(){
+    const $ = (s,r=document)=>r.querySelector(s);
+    const $$= (s,r=document)=>Array.from(r.querySelectorAll(s));
+    const raw = $("#raw-form");
+
+    const PROV = ["Drenthe","Flevoland","Friesland","Gelderland","Groningen","Limburg","Noord-Brabant","Noord-Holland","Overijssel","Utrecht","Zeeland","Zuid-Holland"];
+    $("#provincieSelect").innerHTML = '<option value="">— Kies provincie —</option>' + PROV.map(p=>`<option>${p}</option>`).join("");
+
+    function findField(words, preferSel){
+      for(const p of $$("p", raw)){
+        const lab = p.querySelector("label"); if(!lab) continue;
+        const t = lab.textContent.toLowerCase();
+        if(words.some(w=>t.includes(w))){
+          if(preferSel && !p.querySelector(preferSel)) continue;
+          return p;
+        }
+      }
+      return null;
+    }
+    function ensureHidden(name){ const i=document.createElement("input"); i.type="hidden"; i.name=name; raw.appendChild(i); return i; }
+
+    // provincie
+    let provP = findField(["provincie","province"]);
+    let provIn = provP ? provP.querySelector("select,input") : null;
+    if(provIn){ $("#provincieSelect").value = provIn.value||""; $("#provincieSelect").addEventListener("change", ()=>provIn.value=$("#provincieSelect").value); provP.style.display="none"; }
+    else { provIn = ensureHidden("province"); $("#provincieSelect").addEventListener("change", ()=>provIn.value=$("#provincieSelect").value); }
+
+    // gemeente / woonplaats
+    const gem = $("#gemeenteSelect");
+    let cityP = findField(["woonplaats","city","plaats","town"]);
+    let cityIn = cityP ? cityP.querySelector("select,input") : null;
+    if(cityIn){
+      if(cityIn.tagName==="SELECT") gem.innerHTML = cityIn.innerHTML;
+      gem.value = cityIn.value || "";
+      gem.addEventListener("change", ()=>cityIn.value = gem.value);
+      cityP.style.display = "none";
+    } else {
+      cityIn = ensureHidden("city");
+      gem.addEventListener("change", ()=>cityIn.value = gem.value);
+    }
+
+    // type
+    const typeSlot = $("#type_slot");
+    const typeP = findField(["type","woningtype"], "select");
+    if(typeP){ typeSlot.appendChild(typeP); typeP.style.display=""; }
+    else { typeSlot.innerHTML = '<label class="form-label">Type woning</label><select class="form-select" name="type"></select>'; }
+
+    // huur
+    const huurSlot = $("#huur_slot");
+    const huurP = findField(["huur","rent"]);
+    if(huurP){ const lab=huurP.querySelector("label"); if(lab) lab.textContent="Kale huur"; huurSlot.appendChild(huurP); huurP.style.display=""; }
+    else { huurSlot.innerHTML = '<label class="form-label">Kale huur (€)</label><input class="form-control" type="number" step="1" min="0" name="rent_price">'; }
+
+    // sliders
+    function hookRange(rangeSel, outSel, words, fallback){
+      const range=$(rangeSel), out=$(outSel);
+      const p=findField(words); let src=p?p.querySelector("input"):null;
+      if(!src){ src=ensureHidden(fallback); } else { p.style.display="none"; }
+      range.value = src.value || (range.min||0); out.textContent = range.value;
+      range.addEventListener("input", ()=>{ out.textContent = range.value; src.value = range.value; });
+    }
+    hookRange("#kamersRange","#kamersOut",["aantal kamers","rooms","kamers"],"rooms");
+    hookRange("#slaapRange","#slaapOut",["slaapkamers","bedrooms"],"bedrooms");
+
+    // opp
+    const oppUI = $("#oppInput");
+    let oppP = findField(["oppervlakte","surface","woonoppervlak"]); let oppIn = oppP?oppP.querySelector("input"):null;
+    if(!oppIn){ oppIn = ensureHidden("surface"); } else { oppP.style.display="none"; }
+    oppUI.value = oppIn.value || ""; oppUI.addEventListener("input", ()=>oppIn.value = oppUI.value);
+
+    // foto's
+    const file = $$("input[type='file']", raw)[0];
+    if(file){
+      file.id="origFileInput"; file.multiple=true;
+      const thumbs=$("#thumbs"), main=$("#mainPhoto");
+      function preview(fs){
+        thumbs.innerHTML=""; if(!fs || !fs.length){ main.innerHTML='<span class="text-muted">Nog geen foto</span>'; return;}
+        const first=fs[0]; const R=new FileReader(); R.onload=e=>{ main.innerHTML=`<img src="${e.target.result}" alt="">`; }; R.readAsDataURL(first);
+        Array.from(fs).forEach((f,i)=>{ const r=new FileReader(); r.onload=e=>{ const im=document.createElement("img"); im.src=e.target.result; if(i===0) im.classList.add("active"); im.onclick=()=>{ $$("#thumbs img").forEach(x=>x.classList.remove("active")); im.classList.add("active"); main.innerHTML=`<img src="${e.target.result}" alt="">`; }; thumbs.appendChild(im); }; r.readAsDataURL(f); });
+      }
+      file.addEventListener("change", ()=>preview(file.files));
+      document.querySelector('.upload-wrap label').addEventListener('click', ()=>file.click());
+    } else {
+      document.querySelector('.upload-wrap label').style.opacity=.6;
+    }
+
+    // Kenmerken (NL + 1x, geen 'Want' op eigen)
+    const grid = $("#featuresGrid");
+    const LABELS = [
+      { keys:["balcony","balkon"],                                   nl:"Balkon" },
+      { keys:["terrace","terras"],                                   nl:"Terras" },
+      { keys:["garden","tuin"],                                      nl:"Tuin" },
+      { keys:["storage","berging"],                                  nl:"Berging" },
+      { keys:["shed","schuur"],                                      nl:"Schuur" },
+      { keys:["near shops","shops","winkels"],                       nl:"Dichtbij winkels" },
+      { keys:["near schools","schools","scholen"],                   nl:"Dichtbij scholen" },
+      { keys:["ov","public transport","bereikbaarheid ov","ov "],    nl:"Dichtbij OV" },
+    ];
+    const ADDED = new Set();
+    function toNL(txt){
+      const t = txt.toLowerCase().replace(/[:\s]+$/,'').trim();
+      for(const m of LABELS){ if(m.keys.some(k=>t.includes(k))) return m.nl; }
+      return null;
+    }
+    $$("p", raw).forEach(p=>{
+      const lab=p.querySelector("label"); const chk=p.querySelector("input[type='checkbox']");
+      if(!lab||!chk) return;
+      const low=lab.textContent.trim().toLowerCase();
+      if(/^want\b/.test(low)) return; // eigen: sla 'Want' over
+      const nl=toNL(low.replace(/^my\s+/,''));
+      if(!nl) return;
+      if(ADDED.has(nl)) return;
+      ADDED.add(nl);
+      lab.textContent = nl;
+      p.style.display="";
+      grid.appendChild(p);
+    });
+
+    raw.style.display="none";
+  })();
+  </script>
+
+{% else %}
+  <!-- WENSWONING -->
+  <h3 class="mb-3">Gezochte Woning</h3>
+    <!-- WENSWONING: zelfde velden/kenmerken, geen fotoupload; rechts advertenties -->
+    <h3 class="mb-3">Gezochte Woning</h3>
+
+    <form id="wens-form" method="post" enctype="multipart/form-data" class="woning-form">{% csrf_token %}
+      <div id="raw-form" style="display:none">{{ form.as_p }}</div>
+
+      <!-- Top: Provincie + Gemeente -->
+      <div class="woning-card top-row">
+        <div>
+          <label class="form-label">Provincie</label>
+          <select id="w_prov" class="form-select"></select>
+        </div>
+        <div>
+          <label class="form-label">Gemeente</label>
+          <select id="w_gem" class="form-select"><option value="">— Kies gemeente —</option></select>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Links: details -->
+        <div class="woning-card" id="w_left">
+          <h5>Gewenste details</h5>
+          <div class="mb-3" id="w_type_slot"></div>
+          <div class="mb-3" id="w_huur_slot"></div>
+
+          <div class="mb-3" id="w_kamers_slot">
+            <label class="form-label">Aantal kamers</label>
+            <div class="range-wrap">
+              <input id="w_kamers" type="range" min="1" max="10" step="1" class="form-range">
+              <output id="w_kamers_out">1</output>
+            </div>
+          </div>
+
+          <div class="mb-3" id="w_slaap_slot">
+            <label class="form-label">Aantal slaapkamers</label>
+            <div class="range-wrap">
+              <input id="w_slaap" type="range" min="0" max="10" step="1" class="form-range">
+              <output id="w_slaap_out">0</output>
+            </div>
+          </div>
+
+          <div class="mb-3" id="w_opp_slot">
+            <label class="form-label">Oppervlakte (m²) minimaal</label>
+            <input id="w_opp" type="number" class="form-control" min="0" step="1" placeholder="m²">
+          </div>
+        </div>
+
+        <!-- Rechts: advertenties -->
+        <div class="woning-card">
+          <h5>Advertenties</h5>
+          <div class="ads" id="ads_grid">
+            <!-- gevuld via fetch('/woningen/api/ads/') -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Kenmerken -->
+      <div class="woning-card">
+        <h5>Kenmerken</h5>
+        <div class="features" id="w_feats"></div>
+      </div>
+
+      <div class="mt-3">
+        <button class="btn btn-primary">Wens opslaan</button>
+        <a class="btn btn-outline-secondary" href="/dash/member/">Annuleren</a>
+      </div>
+    </form>
+
+    <link rel="stylesheet" href="{% static 'css/woning_form.css' %}">
+    <script>
+    (function(){
+      const $ = (s, r=document)=>r.querySelector(s);
+      const $$= (s, r=document)=>Array.from(r.querySelectorAll(s));
+      const raw = $("#raw-form");
+
+      const PROV = ["Drenthe","Flevoland","Friesland","Gelderland","Groningen","Limburg","Noord-Brabant","Noord-Holland","Overijssel","Utrecht","Zeeland","Zuid-Holland"];
+      const selProv = $("#w_prov");
+      selProv.innerHTML = '<option value="">— Kies provincie —</option>' + PROV.map(p=>`<option>${p}</option>`).join("");
+
+      function moveFieldByLabel(words, preferSel){
+        for(const p of $$("p", raw)){
+          const lab = p.querySelector("label");
+          if(!lab) continue;
+          const t = lab.textContent.toLowerCase();
+          if(words.some(w=>t.includes(w))){
+            if(preferSel && !p.querySelector(preferSel)) continue;
+            return p;
+          }
+        }
+        return null;
+      }
+
+      // provincie
+      let provP = moveFieldByLabel(["provincie","province"]);
+      let provIn = provP ? provP.querySelector("select,input") : null;
+      if(provIn){
+        selProv.value = provIn.value || "";
+        selProv.addEventListener("change", ()=>{ provIn.value = selProv.value; });
+        provP.style.display = "none";
+      } else {
+        provIn = document.createElement("input");
+        provIn.type="hidden"; provIn.name="province"; raw.appendChild(provIn);
+        selProv.addEventListener("change", ()=>{ provIn.value = selProv.value; });
+      }
+
+      // gemeente/woonplaats
+      const selGem = $("#w_gem");
+      let cityP = moveFieldByLabel(["woonplaats","city","plaats","town"]);
+      let cityIn = cityP ? cityP.querySelector("select,input") : null;
+      if(cityIn){
+        if(cityIn.tagName==="SELECT") selGem.innerHTML = cityIn.innerHTML;
+        selGem.value = cityIn.value || "";
+        selGem.addEventListener("change", ()=>{ cityIn.value = selGem.value; });
+        cityP.style.display = "none";
+      } else {
+        cityIn = document.createElement("input");
+        cityIn.type="hidden"; cityIn.name="city"; raw.appendChild(cityIn);
+        selGem.addEventListener("change", ()=>{ cityIn.value = selGem.value; });
+      }
+
+      // type + huur
+      const typeSlot = $("#w_type_slot");
+      const huurSlot = $("#w_huur_slot");
+      const typeP = moveFieldByLabel(["desired type","type","woningtype"], "select");
+      if(typeP){ typeSlot.appendChild(typeP); typeP.style.display=""; }
+      else { typeSlot.innerHTML = '<label class="form-label">Type woning</label><select class="form-select" name="desired_type"></select>'; }
+
+      const huurP = moveFieldByLabel(["max rent","huur","rent","kale huur"]);
+      if(huurP){ 
+        const lab = huurP.querySelector("label"); if(lab) lab.textContent = "Kale huur (max.)";
+        huurSlot.appendChild(huurP); huurP.style.display="";
+      } else {
+        huurSlot.innerHTML = '<label class="form-label">Kale huur (max.)</label><input class="form-control" type="number" step="1" min="0" name="max_rent">';
+      }
+
+      // sliders (prefer 'Want ...' velden als ze bestaan)
+      function hookRange(rangeEl, outEl, wantKeys, fallbackName){
+        let p = moveFieldByLabel(wantKeys);
+        let src = p ? p.querySelector("input") : null;
+        if(!src){
+          src = document.createElement("input");
+          src.type="hidden"; src.name=fallbackName; raw.appendChild(src);
+        } else {
+          p.style.display="none";
+        }
+        rangeEl.value = src.value || (rangeEl.min||0);
+        outEl.textContent = rangeEl.value;
+        rangeEl.addEventListener("input", ()=>{ outEl.textContent = rangeEl.value; src.value = rangeEl.value; });
+      }
+      hookRange($("#w_kamers"), $("#w_kamers_out"), ["min rooms","min kamers","rooms","kamers"], "min_rooms");
+      hookRange($("#w_slaap"),  $("#w_slaap_out"),  ["min bedrooms","min slaapkamers","bedrooms","slaapkamers"], "min_bedrooms");
+
+      // opp min
+      let oppP = moveFieldByLabel(["min surface","min oppervlakte","surface","woonoppervlak"]);
+      let oppIn = oppP ? oppP.querySelector("input") : null;
+      if(!oppIn){
+        oppIn = document.createElement("input");
+        oppIn.type="hidden"; oppIn.name="min_surface"; raw.appendChild(oppIn);
+      } else {
+        oppP.style.display="none";
+      }
+      const oppUI = $("#w_opp");
+      oppUI.value = oppIn.value || "";
+      oppUI.addEventListener("input", ()=>{ oppIn.value = oppUI.value; });
+
+      // Kenmerken: voor wens geven we voorkeur aan 'Want ...' velden; zo niet, gebruik 'My ...'
+      const grid = $("#w_feats");
+      const LABELS = [
+        { keys:["balcony"],                                   nl:"Balkon" },
+        { keys:["terrace"],                                   nl:"Terras" },
+        { keys:["garden"],                                    nl:"Tuin" },
+        { keys:["storage","berging"],                         nl:"Berging" },
+        { keys:["shed","schuur"],                             nl:"Schuur" },
+        { keys:["near shops","shops","winkels"],              nl:"Dichtbij winkels" },
+        { keys:["near schools","schools","scholen"],          nl:"Dichtbij scholen" },
+        { keys:["ov","public transport","bereikbaarheid ov"], nl:"Dichtbij OV" },
+      ];
+      function toNL(txt){
+        const t = txt.toLowerCase().replace(/[:\s]+$/,'').trim();
+        for(const m of LABELS){ if (m.keys.some(k => t.includes(k))) return m.nl; }
+        return null;
+      }
+      // eerst 'Want ...'
+      const taken = new Set();
+      $$("p", raw).forEach(p=>{
+        const lab = p.querySelector("label"); const chk = p.querySelector("input[type='checkbox']");
+        if(!lab || !chk) return;
+        const low = lab.textContent.trim().toLowerCase();
+        if(!/^want\b/.test(low)) return;
+        const nl = toNL(low.replace(/^want\s+/,''));
+        if(!nl) return;
+        lab.textContent = nl; p.style.display=""; grid.appendChild(p); taken.add(p);
+      });
+      // dan 'My ...' als er geen 'Want' was
+      $$("p", raw).forEach(p=>{
+        if(taken.has(p)) return;
+        const lab = p.querySelector("label"); const chk = p.querySelector("input[type='checkbox']");
+        if(!lab || !chk) return;
+        const low = lab.textContent.trim().toLowerCase();
+        if(/^want\b/.test(low)) return;
+        const nl = toNL(low.replace(/^my\s+/,''));
+        if(!nl) return;
+        lab.textContent = nl; p.style.display=""; grid.appendChild(p);
+      });
+
+      // ADS laden
+      const ads = $("#ads_grid");
+      fetch("/woningen/api/ads/?n=6").then(r=>r.json()).then(data=>{
+        const items = (data && data.items) || [];
+        if(items.length === 0){
+          ads.innerHTML = '<div class="ad-card"><div class="pic"><span class="text-muted">Nog geen aanbod</span></div><div class="meta"><div class="title">Plaats hier uw woning</div><div class="city">Wordt hier getoond als advertentie</div></div></div>';
+          return;
+        }
+        ads.innerHTML = items.map(it=>`
+          <a class="ad-card" href="${it.url}">
+            <div class="pic">${it.thumb ? `<img src="${it.thumb}" alt="">` : '<span class="text-muted">Geen afbeelding</span>'}</div>
+            <div class="meta">
+              <div class="title">${it.title || 'Woning'}</div>
+              <div class="city">${(it.city || '')}</div>
+            </div>
+          </a>
+        `).join("");
+      }).catch(()=>{
+        ads.innerHTML = '<div class="ad-card"><div class="pic"><span class="text-muted">Niet beschikbaar</span></div><div class="meta"><div class="title">Advertenties laden mislukt</div></div></div>';
+      });
+
+      // raw verborgen houden (voor submit noodzakelijk)
+      raw.style.display = "none";
+    })();
+    </script>
+{% endif %}
+
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "dash/_layout.html" %}
+{% load static %}
+{% block sidebar %}{% include "dash/_sidebar_owner.html" with active="profiel" %}{% endblock %}
+{% block dash_content %}
+<h1 class="mb-3">Mijn profiel</h1>
+
+{% if not editing %}
+  <div class="mb-3"><a class="btn btn-primary" href="?edit=1">Bewerk profiel</a></div>
+  <div class="row g-3">
+    <div class="col-lg-4">
+      <div class="card"><div class="card-body text-center">
+        {% if obj.avatar %}<img class="img-fluid rounded mb-2" src="{{ obj.avatar.url }}" alt="Profielfoto">
+        {% else %}<img class="img-fluid rounded mb-2" src="{% static 'agency/logo_placeholder.svg' %}" alt="Placeholder">{% endif %}
+        <div class="fw-semibold">{{ request.user.get_full_name|default:request.user.username }}</div>
+        <div class="text-muted small">{{ request.user.email }}</div>
+      </div></div>
+    </div>
+    <div class="col-lg-8">
+      <div class="card"><div class="card-header fw-bold">Adres</div><div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Adres</dt><dd class="col-sm-8">{{ obj.address|default:"-" }}</dd>
+          <dt class="col-sm-4">Postcode</dt><dd class="col-sm-8">{{ obj.postcode|default:"-" }}</dd>
+          <dt class="col-sm-4">Plaats</dt><dd class="col-sm-8">{{ obj.city|default:"-" }}</dd>
+          <dt class="col-sm-4">Provincie</dt><dd class="col-sm-8">{{ obj.province|default:"-" }}</dd>
+        </dl>
+      </div></div>
+    </div>
+  </div>
+{% else %}
+  <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    {% csrf_token %}
+    <div class="card mb-3 shadow-sm"><div class="card-header fw-bold">Profielfoto</div><div class="card-body">{{ form.avatar }}</div></div>
+    <div class="card mb-3 shadow-sm"><div class="card-header fw-bold">Adres</div><div class="card-body row g-3">
+      <div class="col-md-6">{{ form.address.label_tag }} {{ form.address }}</div>
+      <div class="col-md-3">{{ form.postcode.label_tag }} {{ form.postcode }}</div>
+      <div class="col-md-3">{{ form.city.label_tag }} {{ form.city }}</div>
+      <div class="col-md-4">{{ form.province.label_tag }} {{ form.province }}</div>
+    </div></div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" type="submit">Opslaan</button>
+      <a class="btn btn-outline-secondary" href="{% url 'owner_profile' %}">Annuleren</a>
+    </div>
+  </form>
+{% endif %}
+{% endblock %}

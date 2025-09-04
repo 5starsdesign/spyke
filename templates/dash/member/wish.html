@@ -1,0 +1,117 @@
+{% extends "dash/_layout.html" %}
+{% load static %}
+
+{% block sidebar %}
+  {% include "dash/_sidebar_member.html" with active="wens" %}
+{% endblock %}
+
+{% block dash_content %}
+<h1 class="mb-3">Wenswoning (zoekprofiel)</h1>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <!-- Invulvelden (filters) -->
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Invulvelden (filters)</div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label" for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+          {{ form.city }} {{ form.city.errors }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="{{ form.type.id_for_label }}">{{ form.type.label }}</label>
+          {{ form.type }} {{ form.type.errors }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="{{ form.price.id_for_label }}">Max. huurprijs (€)</label>
+          <div class="input-group">
+            <span class="input-group-text">€</span>
+            {{ form.price }}
+          </div>
+          {{ form.price.errors }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="{{ form.size.id_for_label }}">{{ form.size.label }}</label>
+          <div class="input-group">
+            {{ form.size }} <span class="input-group-text">m²</span>
+          </div>
+          {{ form.size.errors }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="{{ form.rooms.id_for_label }}">{{ form.rooms.label }}</label>
+          {{ form.rooms }} {{ form.rooms.errors }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="{{ form.bedrooms.id_for_label }}">{{ form.bedrooms.label }}</label>
+          {{ form.bedrooms }} {{ form.bedrooms.errors }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkboxen (wensen/voorkeuren) -->
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Checkboxen (wensen/voorkeuren)</div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-12"><h6 class="text-uppercase text-muted mb-2">Buitenruimte gewenst</h6></div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_garden }} <label class="form-check-label ms-1" for="{{ form.want_garden.id_for_label }}">{{ form.want_garden.label }}</label>
+        </div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_balcony }} <label class="form-check-label ms-1" for="{{ form.want_balcony.id_for_label }}">{{ form.want_balcony.label }}</label>
+        </div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_terrace }} <label class="form-check-label ms-1" for="{{ form.want_terrace.id_for_label }}">{{ form.want_terrace.label }}</label>
+        </div>
+
+        <div class="col-12"><hr class="my-2"><h6 class="text-uppercase text-muted mb-2">Opslag gewenst</h6></div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_storage }} <label class="form-check-label ms-1" for="{{ form.want_storage.id_for_label }}">{{ form.want_storage.label }}</label>
+        </div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_shed }} <label class="form-check-label ms-1" for="{{ form.want_shed.id_for_label }}">{{ form.want_shed.label }}</label>
+        </div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_garage }} <label class="form-check-label ms-1" for="{{ form.want_garage.id_for_label }}">{{ form.want_garage.label }}</label>
+        </div>
+
+        <div class="col-12"><hr class="my-2"><h6 class="text-uppercase text-muted mb-2">Locatievoorkeur</h6></div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_near_shops }} <label class="form-check-label ms-1" for="{{ form.want_near_shops.id_for_label }}">{{ form.want_near_shops.label }}</label>
+        </div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_near_schools }} <label class="form-check-label ms-1" for="{{ form.want_near_schools.id_for_label }}">{{ form.want_near_schools.label }}</label>
+        </div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_near_ov }} <label class="form-check-label ms-1" for="{{ form.want_near_ov.id_for_label }}">{{ form.want_near_ov.label }}</label>
+        </div>
+
+        <div class="col-12"><hr class="my-2"><h6 class="text-uppercase text-muted mb-2">Extra’s</h6></div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_ground_floor }} <label class="form-check-label ms-1" for="{{ form.want_ground_floor.id_for_label }}">{{ form.want_ground_floor.label }}</label>
+        </div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_lift }} <label class="form-check-label ms-1" for="{{ form.want_lift.id_for_label }}">{{ form.want_lift.label }}</label>
+        </div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_wheelchair }} <label class="form-check-label ms-1" for="{{ form.want_wheelchair.id_for_label }}">{{ form.want_wheelchair.label }}</label>
+        </div>
+        <div class="col-6 col-md-3 form-check">
+          {{ form.want_pets_allowed }} <label class="form-check-label ms-1" for="{{ form.want_pets_allowed.id_for_label }}">{{ form.want_pets_allowed.label }}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Opslaan</button>
+    <a class="btn btn-outline-secondary" href="{% url 'member_home' %}">Annuleren</a>
+  </div>
+</form>
+{% endblock %}

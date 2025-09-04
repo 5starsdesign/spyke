@@ -1,0 +1,211 @@
+{% extends "dash/_layout.html" %}
+{% load static %}
+{% block sidebar %}{% include "dash/_sidebar_owner.html" with active="nieuw" %}{% endblock %}
+{% block dash_content %}
+<h1 class="mb-3">Nieuwe woning (eigenaar)</h1>
+
+<form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>\n  {% if form.errors %}<div class="alert alert-danger">Corrigeer de gemarkeerde velden.</div>{% endif %}
+{% if form.errors %}
+<div class="alert alert-danger">
+  <div class="fw-bold">Details:</div>
+  <ul class="mb-0">
+    {% for field, errors in form.errors.items %}
+      {% if field != "__all__" %}
+        <li><a href="#id_{{ field }}" class="link-dark link-underline-opacity-50-hover">{{ field|capfirst }}: {{ errors|first }}</a></li>
+      {% else %}
+        <li>{{ errors|first }}</li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+  {% csrf_token %}
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Algemeen</div>
+    <div class="card-body row g-3">
+      <div class="col-12" id="id_listing_kind">
+  <label class="form-label d-block">Aanbodtype</label>
+  <div>
+    {% for radio in form.listing_kind %}
+      <div class="form-check form-check-inline">
+        {{ radio.tag }} <label class="form-check-label ms-1" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+      </div>
+    {% endfor %}
+  </div>
+  {% for e in form.listing_kind.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+</div>
+      <div class="col-lg-8">{{ form.title.label_tag }} {{ form.title }}
+          {% for e in form.title.errors %}<div class=\"invalid-feedback d-block\">{{ e }}</div>{% endfor %}</div>
+      <div class="col-lg-2">{{ form.available_from.label_tag }} {{ form.available_from }}</div>
+      <div class="col-lg-4">
+        <label id="price-label" class="form-label">Prijs (€)</label>
+        <div class="input-group"><span class="input-group-text">€</span>{{ form.price }}</div>
+        {% for e in form.price.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="col-lg-2 form-check mt-4">{{ form.status_active }} <label class="form-check-label ms-1" for="{{ form.status_active.id_for_label }}">{{ form.status_active.label }}</label></div>
+    </div>
+  </div>
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Locatie</div>
+    <div class="card-body row g-3">
+      <div class="col-md-6">{{ form.street.label_tag }} {{ form.street }}</div>
+      <div class="col-md-2">{{ form.house_no.label_tag }} {{ form.house_no }}</div>
+      <div class="col-md-2">{{ form.house_add.label_tag }} {{ form.house_add }}</div>
+      <div class="col-md-2">{{ form.postcode.label_tag }} {{ form.postcode }}
+          {% for e in form.postcode.errors %}<div class=\"invalid-feedback d-block\">{{ e }}</div>{% endfor %}</div>
+      <div class="col-md-4">{{ form.city.label_tag }} {{ form.city }}
+          {% for e in form.city.errors %}<div class=\"invalid-feedback d-block\">{{ e }}</div>{% endfor %}</div>
+      <div class="col-md-4">{{ form.province.label_tag }} {{ form.province }}</div>
+      <div class="col-md-4">{{ form.district.label_tag }} {{ form.district }}</div>
+    </div>
+  </div>
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Objectgegevens</div>
+    <div class="card-body row g-3">
+      <div class="col-md-4">{{ form.property_type.label_tag }} {{ form.property_type }}
+          {% for e in form.property_type.errors %}<div class=\"invalid-feedback d-block\">{{ e }}</div>{% endfor %}</div>
+      <div class="col-md-2">{{ form.build_year.label_tag }} {{ form.build_year }}</div>
+      <div class="col-md-2">{{ form.living_area.label_tag }} {{ form.living_area }}
+          {% for e in form.living_area.errors %}<div class=\"invalid-feedback d-block\">{{ e }}</div>{% endfor %}</div>
+      <div class="col-md-2">{{ form.lot_area.label_tag }} {{ form.lot_area }}</div>
+      <div class="col-md-2">{{ form.energy_label.label_tag }} {{ form.energy_label }}</div>
+      <div class="col-md-2">{{ form.rooms.label_tag }} {{ form.rooms }}
+          {% for e in form.rooms.errors %}<div class=\"invalid-feedback d-block\">{{ e }}</div>{% endfor %}</div>
+      <div class="col-md-2">{{ form.bedrooms.label_tag }} {{ form.bedrooms }}</div>
+      <div class="col-md-2">{{ form.bathrooms.label_tag }} {{ form.bathrooms }}</div>
+      <div class="col-md-2">{{ form.floors.label_tag }} {{ form.floors }}</div>
+      <div class="col-md-4">{{ form.heating.label_tag }} {{ form.heating }}</div>
+      <div class="col-12"><div class="small text-muted">Isolatie</div></div>
+      <div class="col-6 col-md-3 form-check">{{ form.isolation_dak }} <label class="form-check-label ms-1">Dak</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.isolation_muur }} <label class="form-check-label ms-1">Muur</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.isolation_vloer }} <label class="form-check-label ms-1">Vloer</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.isolation_glas }} <label class="form-check-label ms-1">Glas</label></div>
+    </div>
+  </div>
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Kenmerken</div>
+    <div class="card-body row g-2">
+      <div class="col-12 text-uppercase text-muted small">Buitenruimte</div>
+      <div class="col-6 col-md-3 form-check">{{ form.garden }} <label class="form-check-label ms-1">{{ form.garden.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.balcony }} <label class="form-check-label ms-1">{{ form.balcony.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.terrace }} <label class="form-check-label ms-1">{{ form.terrace.label }}</label></div>
+      <div class="col-12"><hr class="my-2"><span class="text-uppercase text-muted small">Opslag & parkeren</span></div>
+      <div class="col-6 col-md-3 form-check">{{ form.storage }} <label class="form-check-label ms-1">{{ form.storage.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.shed }} <label class="form-check-label ms-1">{{ form.shed.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.parking_garage }} <label class="form-check-label ms-1">{{ form.parking_garage.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.parking_spot }} <label class="form-check-label ms-1">{{ form.parking_spot.label }}</label></div>
+      <div class="col-12"><hr class="my-2"><span class="text-uppercase text-muted small">Ligging</span></div>
+      <div class="col-6 col-md-3 form-check">{{ form.near_shops }} <label class="form-check-label ms-1">{{ form.near_shops.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.near_schools }} <label class="form-check-label ms-1">{{ form.near_schools.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.near_ov }} <label class="form-check-label ms-1">{{ form.near_ov.label }}</label></div>
+      <div class="col-12"><hr class="my-2"><span class="text-uppercase text-muted small">Toegankelijkheid</span></div>
+      <div class="col-6 col-md-3 form-check">{{ form.ground_floor }} <label class="form-check-label ms-1">{{ form.ground_floor.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.elevator }} <label class="form-check-label ms-1">{{ form.elevator.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.wheelchair_accessible }} <label class="form-check-label ms-1">{{ form.wheelchair_accessible.label }}</label></div>
+      <div class="col-12"><hr class="my-2"><span class="text-uppercase text-muted small">Overig</span></div>
+      <div class="col-6 col-md-3 form-check">{{ form.solar_panels }} <label class="form-check-label ms-1">{{ form.solar_panels.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.dormer }} <label class="form-check-label ms-1">{{ form.dormer.label }}</label></div>
+      <div class="col-6 col-md-3 form-check">{{ form.extension }} <label class="form-check-label ms-1">{{ form.extension.label }}</label></div>
+    </div>
+  </div>
+
+  <div class="card mb-3 shadow-sm" id="koop-blok">
+    <div class="card-header fw-bold">KOOP</div>
+    <div class="card-body row g-3">
+      
+      <div class="col-md-4">
+        <label class="form-label d-block">{{ form.kk_von.label }}</label>
+        {{ form.kk_von }}
+      </div>
+      <div class="col-md-4">{{ form.vve_service.label_tag }} {{ form.vve_service }}</div>
+      <div class="col-md-4">{{ form.condition_state.label_tag }} {{ form.condition_state }}</div>
+    </div>
+  </div>
+
+  <div class="card mb-3 shadow-sm" id="huur-blok">
+    <div class="card-header fw-bold">HUUR</div>
+    <div class="card-body row g-3">
+      </div>
+      <div class="col-md-4">{{ form.service_costs.label_tag }} {{ form.service_costs }}</div>
+      <div class="col-md-4">{{ form.deposit.label_tag }} {{ form.deposit }}</div>
+      <div class="col-md-3">{{ form.rental_min.label_tag }} {{ form.rental_min }}</div>
+      <div class="col-md-3">{{ form.rental_max.label_tag }} {{ form.rental_max }}</div>
+      <div class="col-md-6">{{ form.income_req.label_tag }} {{ form.income_req }}</div>
+      <div class="col-12">
+        <div class="row g-2">
+          <div class="col-6 col-md-3 form-check">{{ form.pets_allowed }} <label class="form-check-label ms-1">{{ form.pets_allowed.label }}</label></div>
+          <div class="col-6 col-md-3 form-check">{{ form.smoking_allowed }} <label class="form-check-label ms-1">{{ form.smoking_allowed.label }}</label></div>
+        </div>
+      </div>
+      <div class="col-md-6">{{ form.suitable_for.label_tag }} {{ form.suitable_for }}</div>
+    </div>
+  </div>
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Media</div>
+    <div class="card-body row g-3">
+      <div class="col-md-6">{{ form.cover.label_tag }} {{ form.cover }}</div>
+      <div class="col-md-6">{{ form.gallery.label_tag }} {{ form.gallery }}</div>
+      <div class="col-md-6">{{ form.floorplan.label_tag }} {{ form.floorplan }}</div>
+      <div class="col-md-6">{{ form.video_url.label_tag }} {{ form.video_url }}</div>
+    </div>
+  </div>
+
+  
+  </div>
+
+  
+    </div>
+  </div> 
+
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Opslaan</button>
+    <a class="btn btn-outline-secondary" href="{% url 'owner_my' %}">Annuleren</a>
+  </div>
+</form>
+
+<script>
+(function(){
+  function toggleBlocks(){
+    const radios = document.querySelectorAll('input[name="listing_kind"]');
+    let val = "HUUR";
+    radios.forEach(r => { if(r.checked){ val = r.value; } });
+    document.getElementById("koop-blok").style.display = (val === "KOOP") ? "" : "none";
+    document.getElementById("huur-blok").style.display = (val === "HUUR") ? "" : "none";
+  }
+  document.addEventListener("change", (e)=>{
+    if(e.target && e.target.name === "listing_kind"){ toggleBlocks(); }
+  });
+  toggleBlocks();
+})();
+</script>
+{% endblock %}
+
+<script id="autofocus-error">
+(function(){
+  var first = document.querySelector('.is-invalid, .invalid-feedback');
+  if(first){ try { first.scrollIntoView({behavior:'smooth', block:'center'}); } catch(e){} }
+})();
+</script>
+
+<script>
+(function(){
+  function updatePriceLabel(){
+    var selected = document.querySelector('input[name="listing_kind"]:checked');
+    var lbl = document.getElementById('price-label');
+    if(!lbl) return;
+    var huur = selected && selected.value === 'HUUR';
+    lbl.textContent = huur ? 'Huurprijs p/m (€)' : 'Vraagprijs (€)';
+  }
+  document.addEventListener('change', function(e){
+    if(e.target && e.target.name==='listing_kind'){ updatePriceLabel(); }
+  });
+  updatePriceLabel();
+})();
+</script>

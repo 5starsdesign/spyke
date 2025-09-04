@@ -1,0 +1,33 @@
+{% comment %}Bootstrap carousel op basis van 'featured' listings{% endcomment %}
+{% if featured %}
+<div class="container mb-4">
+  <div id="homeCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {% for l in featured %}
+      {% with img=l.marketlistingimage_set.first %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        {% if img %}
+          <img src="{{ img.image.url }}" class="d-block w-100" alt="{{ l.title }}">
+        {% else %}
+          <svg class="d-block w-100" style="height:360px;background:#e9ecef" aria-label="placeholder"></svg>
+        {% endif %}
+        <div class="carousel-caption d-none d-md-block text-start">
+          <h5 class="mb-1">{{ l.title }}</h5>
+          <p class="mb-3 small">{{ l.city }} · {{ l.get_property_type_display }}</p>
+          <a class="btn btn-primary btn-sm"
+             href="/woningen/{% if l.listing_kind == 'HUUR' %}huur{% else %}koop{% endif %}/{{ l.slug }}/">
+            Bekijk
+          </a>
+        </div>
+      </div>
+      {% endwith %}
+    {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Vorige</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Volgende</span>
+  </button>
+</div>
+{% endif %}

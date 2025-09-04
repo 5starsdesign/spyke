@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% load account socialaccount %}{% block title %}Inloggen{% endblock %}{% block content %}
+<h3>Inloggen</h3>
+<form method="post" action="{% url 'account_login' %}">{% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary">Inloggen</button>
+</form>
+
+{# Social login wordt automatisch geactiveerd zodra SocialApps zijn ingesteld. #}
+{% endblock %}
