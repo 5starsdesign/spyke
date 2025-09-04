@@ -1,0 +1,22 @@
+/* WP-achtige auth look */
+.auth-page { max-width: 380px; margin: 4rem auto; }
+.auth-logo { display:block; text-align:center; margin-bottom: 1.25rem; }
+.auth-logo img { height: 36px; opacity:.95 }
+.auth-card {
+  background:#fff; border:1px solid #dcdcde; border-radius:8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04); padding: 24px;
+}
+.auth-title { font-size:1.15rem; margin-bottom: .75rem; font-weight:600; }
+.auth-links { text-align:center; margin-top:1rem; color:#6c757d; font-size:.95rem }
+.auth-links a { text-decoration:none; }
+.auth-links .sep { margin: 0 .5rem; color:#b5b5b8; }
+
+.form-control { border-radius:8px; }
+.form-control:focus {
+  border-color:#2271b1; box-shadow:0 0 0 .2rem rgba(34,113,177,.175);
+}
+.btn-auth { border-radius:8px; padding:.6rem 1rem; }
+.btn-google { display:block; width:100%; margin-top:.5rem; }
+
+.auth-divider { display:flex; align-items:center; gap:.75rem; margin: .75rem 0 1rem; color:#8c8f94; font-size:.9rem }
+.auth-divider::before, .auth-divider::after { content:""; flex:1; height:1px; background:#e2e3e5; }
