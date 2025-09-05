@@ -7,11 +7,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>{% block title %}123woningruilen.nl{% endblock %}</title>
 <meta name="description" content="{% block description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
 <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
-{# Open Graph (Facebook, LinkedIn) #}
+{# Open Graph #}
 <meta property="og:title" content="{% block og_title %}123woningruilen.nl{% endblock %}">
 <meta property="og:description" content="{% block og_description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
 <meta property="og:image" content="{% block og_image %}{{ request.build_absolute_uri }}static/img/og-default.jpg{% endblock %}">
