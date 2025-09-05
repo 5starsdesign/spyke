@@ -1,30 +1,19 @@
-{% comment %}
-SEO meta partial
-- staging (herkenbaar via hostnaam) → altijd noindex
-- productie → SEO velden of fallback
-{% endcomment %}
-
+{# templates/partials/meta.html #}
 {% if "staging" in request.get_host %}
   <meta name="robots" content="noindex,nofollow">
 {% else %}
-  {% if seo_title %}
-    <title>{{ seo_title }}</title>
-    <meta property="og:title" content="{{ seo_title }}">
-  {% else %}
-    <title>123woningruilen.nl</title>
-    <meta property="og:title" content="123woningruilen.nl">
-  {% endif %}
-
-  {% if seo_description %}
-    <meta name="description" content="{{ seo_description }}">
-    <meta property="og:description" content="{{ seo_description }}">
-  {% endif %}
-
-  {% if canonical_url %}
-    <link rel="canonical" href="{{ canonical_url }}">
-  {% endif %}
-
-  {% if og_image %}
-    <meta property="og:image" content="{{ og_image.url }}">
-  {% endif %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}123woningruilen.nl{% endblock %}</title>
+  <meta name="description" content="{% block description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+  <meta property="og:title" content="{% block og_title %}123woningruilen.nl{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
+  <meta property="og:image" content="{% block og_image %}{{ request.build_absolute_uri }}static/img/og-default.jpg{% endblock %}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block twitter_title %}123woningruilen.nl{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
+  <meta name="twitter:image" content="{% block twitter_image %}{{ request.build_absolute_uri }}static/img/og-default.jpg{% endblock %}">
 {% endif %}
