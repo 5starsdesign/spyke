@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
 {% block title %}Home · Woningruil{% endblock %}
-{% block description %}Vind je volgende thuis via ruil, huur of koop. Premium leden zien direct adres en contactgegevens.{% endblock %}
 
 {% block below_nav %}
   {% include "includes/_slideshow.html" %}
@@ -10,7 +8,7 @@
 {% block content %}
   {% include "includes/_hero.html" %}
 
-  <h4 class="mb-3 mt-4">Uitgelichte woningen</h4>
+  <h4 class="mb-3 mt-4">Uitgelichte panden</h4>
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
     {% for l in featured %}
       <div class="col"><div class="card h-100">

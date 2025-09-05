@@ -2,7 +2,9 @@
 <!doctype html>
 <html lang="nl">
   <head>
-    {% include "partials/meta.html" %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Woningruil{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <style>.footer{border-top:1px solid #eee;margin-top:3rem;padding:2rem 0;font-size:.95rem}.nav-link.active{font-weight:600}.sidebar{min-width:220px}</style>
