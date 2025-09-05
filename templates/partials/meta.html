@@ -1,6 +1,5 @@
 {% load static %}
 {% if "staging" in request.get_host %}
-  <!-- staging moet nooit geïndexeerd worden -->
   <meta name="robots" content="noindex,nofollow">
 {% endif %}
 
@@ -30,7 +29,7 @@
 <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
 <meta name="theme-color" content="#0d6efd">
 
-{# Structured Data: WebSite + zoekfunctie #}
+{# JSON-LD Structured Data #}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -45,7 +44,6 @@
 }
 </script>
 
-{# Structured Data: Organization #}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -60,70 +58,3 @@
   ]
 }
 </script>
-
-{# Structured Data: Breadcrumbs — alleen includen op detailpagina's #}
-{% if object %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Woningen",
-      "item": "https://123woningruilen.nl/woningen/"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "{{ object.get_listing_kind_display }}woningen",
-      "item": "https://123woningruilen.nl/woningen/{{ object.listing_kind|lower }}/"
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": "{{ object.title|escapejs }}",
-      "item": "{{ request.build_absolute_uri }}"
-    }
-  ]
-}
-</script>
-{% endif %}
-
-{# Structured Data: Offer (voor woningdetailpagina's) #}
-{% if object %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Offer",
-  "url": "{{ request.build_absolute_uri }}",
-  "name": "{{ object.title|escapejs }}",
-  "description": "{{ object.description|striptags|truncatewords:50|escapejs }}",
-  "image": [
-    {% for img in object.gallery.all %}
-      "{{ img.image.url }}"{% if not forloop.last %},{% endif %}
-    {% empty %}
-      "https://123woningruilen.nl/static/img/og-default.jpg"
-    {% endfor %}
-  ],
-  {% if object.price %}
-  "price": "{{ object.price }}",
-  "priceCurrency": "EUR",
-  {% endif %}
-  "availability": "https://schema.org/{% if object.is_active %}InStock{% else %}OutOfStock{% endif %}",
-  "itemOffered": {
-    "@type": "Product",
-    "name": "{{ object.get_listing_kind_display }}",
-    "brand": {
-      "@type": "Brand",
-      "name": "123woningruilen.nl"
-    }
-  },
-  "areaServed": {
-    "@type": "Place",
-    "name": "{{ object.city }}, {{ object.province }}"
-  }
-}
-</script>
-{% endif %}
