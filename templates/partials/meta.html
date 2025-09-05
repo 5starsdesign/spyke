@@ -1,19 +1,129 @@
-{# templates/partials/meta.html #}
+{% load static %}
 {% if "staging" in request.get_host %}
+  <!-- staging moet nooit geïndexeerd worden -->
   <meta name="robots" content="noindex,nofollow">
-{% else %}
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}123woningruilen.nl{% endblock %}</title>
-  <meta name="description" content="{% block description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
-  <link rel="canonical" href="{{ request.build_absolute_uri }}">
-  <meta property="og:title" content="{% block og_title %}123woningruilen.nl{% endblock %}">
-  <meta property="og:description" content="{% block og_description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
-  <meta property="og:image" content="{% block og_image %}{{ request.build_absolute_uri }}static/img/og-default.jpg{% endblock %}">
-  <meta property="og:url" content="{{ request.build_absolute_uri }}">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{% block twitter_title %}123woningruilen.nl{% endblock %}">
-  <meta name="twitter:description" content="{% block twitter_description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
-  <meta name="twitter:image" content="{% block twitter_image %}{{ request.build_absolute_uri }}static/img/og-default.jpg{% endblock %}">
+{% endif %}
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>{% block title %}123woningruilen.nl{% endblock %}</title>
+<meta name="description" content="{% block description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+{# Open Graph (Facebook, LinkedIn) #}
+<meta property="og:title" content="{% block og_title %}123woningruilen.nl{% endblock %}">
+<meta property="og:description" content="{% block og_description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
+<meta property="og:image" content="{% block og_image %}{{ request.build_absolute_uri }}static/img/og-default.jpg{% endblock %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="nl_NL">
+
+{# Twitter Cards #}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{% block twitter_title %}123woningruilen.nl{% endblock %}">
+<meta name="twitter:description" content="{% block twitter_description %}Woningruil, huur en koop – eenvoudig geregeld{% endblock %}">
+<meta name="twitter:image" content="{% block twitter_image %}{{ request.build_absolute_uri }}static/img/og-default.jpg{% endblock %}">
+
+{# Icons en kleuren #}
+<link rel="icon" href="{% static 'img/favicon.ico' %}">
+<link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
+<meta name="theme-color" content="#0d6efd">
+
+{# Structured Data: WebSite + zoekfunctie #}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "123woningruilen.nl",
+  "url": "https://123woningruilen.nl/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://123woningruilen.nl/zoek/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+{# Structured Data: Organization #}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "123woningruilen.nl",
+  "url": "https://123woningruilen.nl/",
+  "logo": "https://123woningruilen.nl/static/img/logo.svg",
+  "sameAs": [
+    "https://www.facebook.com/123woningruilen",
+    "https://www.instagram.com/123woningruilen",
+    "https://www.linkedin.com/company/123woningruilen"
+  ]
+}
+</script>
+
+{# Structured Data: Breadcrumbs — alleen includen op detailpagina's #}
+{% if object %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Woningen",
+      "item": "https://123woningruilen.nl/woningen/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ object.get_listing_kind_display }}woningen",
+      "item": "https://123woningruilen.nl/woningen/{{ object.listing_kind|lower }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ object.title|escapejs }}",
+      "item": "{{ request.build_absolute_uri }}"
+    }
+  ]
+}
+</script>
+{% endif %}
+
+{# Structured Data: Offer (voor woningdetailpagina's) #}
+{% if object %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Offer",
+  "url": "{{ request.build_absolute_uri }}",
+  "name": "{{ object.title|escapejs }}",
+  "description": "{{ object.description|striptags|truncatewords:50|escapejs }}",
+  "image": [
+    {% for img in object.gallery.all %}
+      "{{ img.image.url }}"{% if not forloop.last %},{% endif %}
+    {% empty %}
+      "https://123woningruilen.nl/static/img/og-default.jpg"
+    {% endfor %}
+  ],
+  {% if object.price %}
+  "price": "{{ object.price }}",
+  "priceCurrency": "EUR",
+  {% endif %}
+  "availability": "https://schema.org/{% if object.is_active %}InStock{% else %}OutOfStock{% endif %}",
+  "itemOffered": {
+    "@type": "Product",
+    "name": "{{ object.get_listing_kind_display }}",
+    "brand": {
+      "@type": "Brand",
+      "name": "123woningruilen.nl"
+    }
+  },
+  "areaServed": {
+    "@type": "Place",
+    "name": "{{ object.city }}, {{ object.province }}"
+  }
+}
+</script>
 {% endif %}
