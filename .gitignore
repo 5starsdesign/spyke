@@ -205,3 +205,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+**/Makefile
+audit_capture_v2.sh
+export_project_docs.py

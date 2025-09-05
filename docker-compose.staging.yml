@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16-alpine
+    env_file: .env.staging
+    volumes:
+      - pgdata_staging:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 5s
+      retries: 40
+
+  web:
+    build: .
+    env_file: .env.staging
+    volumes:
+      - .:/app
+      - ./media_staging:/app/media
+      - ./staticfiles_staging:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${WEB_PORT:-8001}:8000"
+
+volumes:
+  pgdata_staging: {}

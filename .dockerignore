@@ -15,3 +15,10 @@ dist/
 build/
 staticfiles/
 media/
+*.egg-info
+*.egg
+.tox/
+.pytest_cache/
+.coverage
+.DS_Store
+Thumbs.db

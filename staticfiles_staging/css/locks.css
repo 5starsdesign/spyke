@@ -1,0 +1,7 @@
+.locked { position: relative; }
+.locked .lock-blur { filter: blur(7px); user-select: none; pointer-events: none; }
+.locked .lock-cover { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.6); }
+.lock-msg { backdrop-filter: blur(3px); background:rgba(255,255,255,.85); border:1px solid #e5e7eb;
+  padding:10px 14px; border-radius:10px; text-align:center; }
+.lock-msg .title { font-weight:600; margin-bottom:6px; }

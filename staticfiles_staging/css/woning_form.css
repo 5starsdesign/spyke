@@ -1,0 +1,30 @@
+.woning-form { display:grid; gap:1.25rem }
+.woning-form .top-row { display:grid; grid-template-columns: 1fr 1fr; gap: .75rem }
+.woning-form .two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 1.25rem }
+.woning-card { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:16px }
+.woning-card h5 { margin:0 0 .75rem; font-size:1rem; font-weight:600 }
+.form-control, .form-select { border-radius:8px }
+.range-wrap { display:flex; align-items:center; gap:.5rem }
+.range-wrap output { min-width:2ch; text-align:right; font-variant-numeric: tabular-nums }
+.gallery { display:grid; grid-template-rows: auto auto; gap:.75rem }
+.gallery .main { width:100%; aspect-ratio: 16/10; border:1px dashed #cbd5e1; border-radius:10px; display:grid; place-items:center; overflow:hidden; background:#f8fafc }
+.gallery .main img { width:100%; height:100%; object-fit:cover }
+.gallery .thumbs { display:grid; grid-template-columns: repeat(6, 1fr); gap:.5rem }
+.gallery .thumbs img { width:100%; aspect-ratio: 1/1; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent }
+.gallery .thumbs img.active { border-color:#2563eb }
+.upload-wrap input[type="file"] { display:none }
+.upload-wrap label { display:inline-block; padding:.5rem .9rem; border:1px solid #cbd5e1; border-radius:8px; cursor:pointer }
+.features { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:.5rem }
+@media (max-width: 992px){
+  .woning-form .two-col, .woning-form .top-row { grid-template-columns: 1fr; }
+  .features { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+.ads { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:.75rem }
+.ad-card { border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; background:#fff; display:flex; flex-direction:column }
+.ad-card .pic { aspect-ratio: 16/10; background:#f1f5f9; display:grid; place-items:center; overflow:hidden }
+.ad-card .pic img { width:100%; height:100%; object-fit:cover }
+.ad-card .meta { padding:.5rem .75rem; font-size:.9rem }
+.ad-card .meta .title { font-weight:600 }
+@media (max-width: 992px){ .ads { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 576px){ .ads { grid-template-columns: 1fr; } }
