@@ -208,3 +208,4 @@ __marimo__/
 **/Makefile
 audit_capture_v2.sh
 export_project_docs.py
+robots.txt
