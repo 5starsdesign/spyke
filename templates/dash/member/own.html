@@ -8,7 +8,7 @@
 {% block dash_content %}
 <h1 class="mb-3">Eigen woning</h1>
 
-<form method="post" enctype="multipart/form-data" novalidate>
+<form method="post" action="{% url 'member_own' %}" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
 
   {% if form.non_field_errors %}

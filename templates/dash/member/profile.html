@@ -16,7 +16,7 @@
   {% endif %}
 
   <div class="card mb-3 shadow-sm">
-    <div class="card-header fw-bold">Account (alleen-lezen)</div>
+    <div class="card-header fw-bold">Account</div>
     <div class="card-body">
       <div class="row g-3">
         <div class="col-md-4">
@@ -24,12 +24,19 @@
           <input class="form-control" value="{{ request.user.username }}" disabled>
         </div>
         <div class="col-md-4">
-          <label class="form-label">Naam</label>
-          <input class="form-control" value="{{ request.user.get_full_name|default:request.user.username }}" disabled>
+          <label class="form-label" for="id_first_name">Voornaam</label>
+          <input type="text" class="form-control" name="first_name" id="id_first_name"
+                 value="{{ request.user.first_name }}">
         </div>
         <div class="col-md-4">
-          <label class="form-label">E-mail</label>
-          <input class="form-control" value="{{ request.user.email }}" disabled>
+          <label class="form-label" for="id_last_name">Achternaam</label>
+          <input type="text" class="form-control" name="last_name" id="id_last_name"
+                 value="{{ request.user.last_name }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="id_email">E-mail</label>
+          <input type="email" class="form-control" name="email" id="id_email"
+                 value="{{ request.user.email }}">
         </div>
       </div>
     </div>
