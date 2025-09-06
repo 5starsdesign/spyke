@@ -6,12 +6,15 @@ from properties.models import MarketListing, ExchangeOffer
 from properties.forms import MarketListingForm, ExchangeOfferForm
 from matchmaking.utils import find_matches_for
 
+
 def role_guard(user, role):
-    if not user.is_authenticated: return False
+    if not user.is_authenticated:
+        return False
     try:
         return user.profile.role == role
     except Profile.DoesNotExist:
         return False
+
 
 def role_required(role):
     def dec(fn):
@@ -22,22 +25,26 @@ def role_required(role):
         return login_required(wrapper)
     return dec
 
+
+# --- MEMBER ---
 @role_required(Profile.ROLE_MEMBER)
 def member_home(request):
     offer = ExchangeOffer.objects.filter(member=request.user).first()
     matches = find_matches_for(offer) if offer else []
     return render(request, "dash/member/home.html", {"offer": offer, "matches": matches})
 
+
 @role_required(Profile.ROLE_MEMBER)
 def member_profile(request):
     prof = request.user.profile
     if request.method == "POST":
-        prof.display_name = request.POST.get("display_name","")
-        prof.city = request.POST.get("city","")
-        prof.bio = request.POST.get("bio","")
+        prof.display_name = request.POST.get("display_name", "")
+        prof.city = request.POST.get("city", "")
+        prof.bio = request.POST.get("bio", "")
         prof.save()
         return redirect("dash_member")
     return render(request, "dash/member/profile.html", {"profile": prof})
+
 
 @role_required(Profile.ROLE_MEMBER)
 def member_edit_offer(request):
@@ -53,26 +60,31 @@ def member_edit_offer(request):
         form = ExchangeOfferForm(instance=offer)
     return render(request, "dash/member/offer_form.html", {"form": form})
 
+
 @role_required(Profile.ROLE_MEMBER)
 def member_matches(request):
     offer = ExchangeOffer.objects.filter(member=request.user).first()
     matches = find_matches_for(offer) if offer else []
     return render(request, "dash/member/matches.html", {"matches": matches})
 
+
+# --- OWNER ---
 @role_required(Profile.ROLE_OWNER)
 def owner_home(request):
     items = MarketListing.objects.filter(owner=request.user)
     return render(request, "dash/owner/home.html", {"items": items})
 
+
 @role_required(Profile.ROLE_OWNER)
 def owner_profile(request):
     prof = request.user.profile
     if request.method == "POST":
-        prof.display_name = request.POST.get("display_name","")
-        prof.city = request.POST.get("city","")
+        prof.display_name = request.POST.get("display_name", "")
+        prof.city = request.POST.get("city", "")
         prof.save()
         return redirect("dash_owner")
     return render(request, "dash/owner/profile.html", {"profile": prof})
+
 
 @role_required(Profile.ROLE_OWNER)
 def owner_new_listing(request):
@@ -88,27 +100,32 @@ def owner_new_listing(request):
         form = MarketListingForm()
     return render(request, "dash/owner/listing_form.html", {"form": form})
 
+
 @role_required(Profile.ROLE_OWNER)
 def owner_my_listings(request):
     items = MarketListing.objects.filter(owner=request.user)
     return render(request, "dash/owner/list.html", {"items": items})
 
+
+# --- AGENCY ---
 @role_required(Profile.ROLE_AGENCY)
 def agency_home(request):
     items = MarketListing.objects.filter(owner=request.user)
     return render(request, "dash/agency/home.html", {"items": items})
 
+
 @role_required(Profile.ROLE_AGENCY)
 def agency_profile(request):
     prof = request.user.profile
     if request.method == "POST":
-        prof.company_name = request.POST.get("company_name","")
-        prof.address = request.POST.get("address","")
-        prof.city = request.POST.get("city","")
-        prof.phone = request.POST.get("phone","")
+        prof.company_name = request.POST.get("company_name", "")
+        prof.address = request.POST.get("address", "")
+        prof.city = request.POST.get("city", "")
+        prof.phone = request.POST.get("phone", "")
         prof.save()
         return redirect("dash_agency")
     return render(request, "dash/agency/profile.html", {"profile": prof})
+
 
 @role_required(Profile.ROLE_AGENCY)
 def agency_new_listing(request):
@@ -124,7 +141,21 @@ def agency_new_listing(request):
         form = MarketListingForm()
     return render(request, "dash/agency/listing_form.html", {"form": form})
 
+
 @role_required(Profile.ROLE_AGENCY)
 def agency_my_listings(request):
     items = MarketListing.objects.filter(owner=request.user)
     return render(request, "dash/agency/list.html", {"items": items})
+
+
+# --- Redirect ---
+@login_required
+def my_dashboard_redirect(request):
+    role = getattr(request.user.profile, "role", None)
+    if role == Profile.ROLE_MEMBER:
+        return redirect("member_home")
+    elif role == Profile.ROLE_OWNER:
+        return redirect("owner_home")
+    elif role == Profile.ROLE_AGENCY:
+        return redirect("agency_home")
+    return redirect("/")

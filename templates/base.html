@@ -23,25 +23,26 @@
             <li class="nav-item"><a class="nav-link {% if request.path|slice:":5" == "/blog" %}active{% endif %}" href="/blog/">Blog</a></li>
           </ul>
           <ul class="navbar-nav">
-            {% if user.is_authenticated %}
-              {% with role=user.profile.role %}
-                {% if role == "MEMBER" %}
-                  <li class="nav-item"><a class="nav-link" href="/dash/member/">Mijn dashboard</a></li>
-                {% elif role == "OWNER" %}
-                  <li class="nav-item"><a class="nav-link" href="/dash/owner/">Mijn dashboard</a></li>
-                {% elif role == "AGENCY" %}
-                  <li class="nav-item"><a class="nav-link" href="/dash/agency/">Mijn dashboard</a></li>
-                {% endif %}
-              {% endwith %}
-              {% if user.is_staff %}
-                <li class="nav-item"><a class="nav-link" href="/admin/">Admin</a></li>
-              {% endif %}
-              <li class="nav-item"><a class="nav-link" href="/accounts/logout/">Uitloggen</a></li>
-            {% else %}
-              <li class="nav-item"><a class="nav-link" href="/accounts/login/">Inloggen</a></li>
-              <li class="nav-item"><a class="nav-link" href="/accounts/signup/">Account maken</a></li>
-            {% endif %}
-          </ul>
+  {% if user.is_authenticated %}
+    {% with role=user.profile.role %}
+      {% if role == "MEMBER" %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'member_home' %}">Mijn dashboard</a></li>
+      {% elif role == "OWNER" %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'owner_home' %}">Mijn dashboard</a></li>
+      {% elif role == "AGENCY" %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'agency_home' %}">Mijn dashboard</a></li>
+      {% endif %}
+    {% endwith %}
+    {% if user.is_staff %}
+      <li class="nav-item"><a class="nav-link" href="/admin/">Admin</a></li>
+    {% endif %}
+    <li class="nav-item"><a class="nav-link" href="/accounts/logout/">Uitloggen</a></li>
+  {% else %}
+    <li class="nav-item"><a class="nav-link" href="/accounts/login/">Inloggen</a></li>
+    <li class="nav-item"><a class="nav-link" href="/accounts/signup/">Account maken</a></li>
+  {% endif %}
+</ul>
+
         </div>
       </div>
     </nav>

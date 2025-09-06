@@ -209,3 +209,4 @@ __marimo__/
 audit_capture_v2.sh
 export_project_docs.py
 robots.txt
+requirements-dev.txt

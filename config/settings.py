@@ -105,7 +105,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 SITE_ID = 1
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/mijn-dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 
 ACCOUNT_EMAIL_REQUIRED = True

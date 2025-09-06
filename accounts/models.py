@@ -1,9 +1,20 @@
 from django.db import models
 from django.conf import settings
 
+
 class Profile(models.Model):
+    ROLE_MEMBER = "MEMBER"
+    ROLE_OWNER = "OWNER"
+    ROLE_AGENCY = "AGENCY"
+
+    ROLE_CHOICES = [
+        (ROLE_MEMBER, "Lid"),
+        (ROLE_OWNER, "Eigenaar"),
+        (ROLE_AGENCY, "Makelaarskantoor"),
+    ]
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
-    role = models.CharField(max_length=50, blank=True, null=True)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, blank=True, null=True)
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     postcode = models.CharField(max_length=16, blank=True, null=True)
@@ -18,6 +29,7 @@ class Profile(models.Model):
     def is_premium(self):
         premium_emails = getattr(settings, "PREMIUM_EMAILS", [])
         return bool(self.premium or (self.user and self.user.email in premium_emails))
+
 
 class AgencyProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="agency_profile")
@@ -69,12 +81,31 @@ class AgencyProfile(models.Model):
             base = self.company_trade_name or self.company_legal_name or (self.user.get_username() if self.user_id else "agency")
             from django.utils.text import slugify
             base = slugify(base)[:200] or "agency"
-            slug = base; i=2
+            slug = base
+            i = 2
             while AgencyProfile.objects.filter(slug=slug).exclude(pk=self.pk).exists():
-                slug = f"{base}-{i}"[:220]; i+=1
+                slug = f"{base}-{i}"[:220]
+                i += 1
             self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.company_trade_name or self.company_legal_name or f"Agency {self.pk}"
 
+class OwnerProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="owner_profile"
+    )
+    display_name = models.CharField(max_length=200, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    postcode = models.CharField(max_length=16, blank=True)
+    city = models.CharField(max_length=120, blank=True)
+    phone = models.CharField(max_length=64, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.display_name or f"Owner {self.user.username}"
