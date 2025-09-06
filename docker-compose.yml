@@ -1,11 +1,11 @@
+version: "3.9"
+
 services:
   db:
     image: postgres:16-alpine
+    container_name: woningruil-db
+    restart: always
     env_file: .env
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -16,15 +16,13 @@ services:
 
   web:
     build: .
+    container_name: woningruil-web
+    restart: always
     env_file: .env
-    environment:
-      MAILCHIMP_API_KEY: ${MAILCHIMP_API_KEY}
-      MAILCHIMP_SERVER_PREFIX: ${MAILCHIMP_SERVER_PREFIX}
-      MAILCHIMP_LIST_ID: ${MAILCHIMP_LIST_ID}
-      MAILCHIMP_DOUBLE_OPTIN: ${MAILCHIMP_DOUBLE_OPTIN}
     volumes:
       - .:/app
       - ./media:/app/media
+      - ./staticfiles:/app/staticfiles
     depends_on:
       db:
         condition: service_healthy
@@ -32,4 +30,4 @@ services:
       - "8000:8000"
 
 volumes:
-  pgdata: null
+  pgdata:
