@@ -1,31 +1,38 @@
-from dashboards.agency_forms import AgencyListingForm
-from properties.models import MarketListing, MarketListingImage
-from dashboards.agency_new_form import AgencyNewForm
-from django.db import transaction
-from django.utils.text import slugify
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.text import slugify
+
+from dashboards.agency_forms import AgencyListingForm
+from dashboards.agency_new_form import AgencyNewForm
+from properties.models import MarketListing, MarketListingImage
 
 from .agency_forms import AgencyListingForm
-from .utils import (
-    _get_listing_model, _get_listing_image_model, _has_field, _owned_qs,
-    _slug_or_pk, _get_by_slug_or_pk, _kind_path
-)
-from properties.models import MarketListing
+from .utils import (_get_by_slug_or_pk, _get_listing_image_model,
+                    _get_listing_model, _has_field, _kind_path, _owned_qs,
+                    _slug_or_pk)
+
 
 @login_required
 def agency_home(request):
     q = (request.GET.get("q") or "").strip()
     qs = _owned_qs(request.user, MarketListing).order_by("-created_at")
     if q:
-        qs = qs.filter(Q(title__icontains=q) | Q(address__icontains=q) | Q(city__icontains=q) | Q(postcode__icontains=q))
+        qs = qs.filter(
+            Q(title__icontains=q)
+            | Q(address__icontains=q)
+            | Q(city__icontains=q)
+            | Q(postcode__icontains=q)
+        )
     return render(request, "dash/agency/home.html", {"listings": qs, "q": q})
+
 
 # Backwards-compat alias
 def agency_my(request):
     return agency_home(request)
+
 
 @login_required
 def agency_new(request):
@@ -45,21 +52,25 @@ def agency_listing_edit(request, slug):
     obj = MarketListing.objects.filter(slug=slug, owner=request.user).first()
     if not obj:
         from django.http import Http404
+
         raise Http404("Listing niet gevonden")
     if request.method == "POST":
         form = AgencyListingForm(request.POST, request.FILES, instance=obj)
         if form.is_valid():
             obj = form.save()
             # uploads verwerken
-            if request.FILES.get('new_cover'):
-                MarketListingImage.objects.create(listing=obj, image=request.FILES['new_cover'])
-            for f in request.FILES.getlist('new_gallery'):
+            if request.FILES.get("new_cover"):
+                MarketListingImage.objects.create(
+                    listing=obj, image=request.FILES["new_cover"]
+                )
+            for f in request.FILES.getlist("new_gallery"):
                 MarketListingImage.objects.create(listing=obj, image=f)
             messages.success(request, "Woning opgeslagen.")
-            return redirect('agency_listing_edit', slug=obj.slug)
+            return redirect("agency_listing_edit", slug=obj.slug)
     else:
         form = AgencyListingForm(instance=obj)
-    return render(request, 'dash/agency/edit.html', {'form': form, 'obj': obj})
+    return render(request, "dash/agency/edit.html", {"form": form, "obj": obj})
+
 
 @login_required
 def agency_profile(request):
@@ -68,11 +79,15 @@ def agency_profile(request):
     Losstaand van members.
     """
     return render(request, "dash/agency/profile.html", {"user_obj": request.user})
-from django.contrib.auth.decorators import login_required
+
+
 from django.contrib import messages
-from django.shortcuts import render, redirect
-from dashboards.agency_profile_forms import AgencyProfileForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+
 from accounts.models import AgencyProfile
+from dashboards.agency_profile_forms import AgencyProfileForm
+
 
 @login_required
 def agency_profile(request):
@@ -88,7 +103,11 @@ def agency_profile(request):
             return redirect("agency_profile")
     else:
         form = AgencyProfileForm(instance=obj)
-    return render(request, "dash/agency/profile.html", {"form": form, "obj": obj, "editing": editing})
+    return render(
+        request,
+        "dash/agency/profile.html",
+        {"form": form, "obj": obj, "editing": editing},
+    )
 
 
 def _unique_slug(model, base):
@@ -99,6 +118,7 @@ def _unique_slug(model, base):
         cand = f"{base}-{i}"[:220]
         i += 1
     return cand
+
 
 @login_required
 def agency_new(request):
@@ -153,11 +173,15 @@ def agency_new(request):
                 obj.save()
 
                 if request.FILES.get("cover"):
-                    MarketListingImage.objects.create(listing=obj, image=request.FILES["cover"])
+                    MarketListingImage.objects.create(
+                        listing=obj, image=request.FILES["cover"]
+                    )
                 for f in request.FILES.getlist("gallery"):
                     MarketListingImage.objects.create(listing=obj, image=f)
                 if request.FILES.get("floorplan"):
-                    MarketListingImage.objects.create(listing=obj, image=request.FILES["floorplan"])
+                    MarketListingImage.objects.create(
+                        listing=obj, image=request.FILES["floorplan"]
+                    )
 
             messages.success(request, "Woning aangemaakt.")
             return redirect("/dash/agency/")

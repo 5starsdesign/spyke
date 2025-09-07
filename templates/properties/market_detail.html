@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ listing.title }}</h1>
+<p>{{ listing.address }}, {{ listing.city }}</p>
+<p>Prijs: € {{ listing.price }}</p>
+<p>Type: {{ listing.get_listing_kind_display }}</p>
+{% endblock %}

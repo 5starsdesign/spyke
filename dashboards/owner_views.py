@@ -1,22 +1,26 @@
-from django.db import transaction
-from django.utils.text import slugify
-from accounts.models import Profile
-from dashboards.owner_forms import OwnerProfileForm
-from dashboards.owner_forms import OwnerListingForm
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
-from properties.models import MarketListing, MarketListingImage, MarketListingImage
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.text import slugify
+
+from accounts.models import Profile
+from dashboards.owner_forms import OwnerListingForm, OwnerProfileForm
+from properties.models import MarketListing, MarketListingImage
+
 from .owner_new_form import OwnerNewForm
+
 
 @login_required
 def owner_home(request):
     return redirect("owner_my")
 
+
 @login_required
 def owner_my(request):
     listings = MarketListing.objects.filter(owner=request.user).order_by("-updated_at")
     return render(request, "dash/owner/my.html", {"listings": listings})
+
 
 @login_required
 def owner_new(request):
@@ -24,7 +28,8 @@ def owner_new(request):
         form = OwnerNewForm(request.POST, request.FILES)
         if form.is_valid():
             cd = form.cleaned_data
-            from properties.models import MarketListing, MarketListingImage, MarketListingImage
+            from properties.models import MarketListing, MarketListingImage
+
             with transaction.atomic():
                 obj = MarketListing(
                     owner=request.user,
@@ -73,21 +78,30 @@ def owner_new(request):
 
                 # Media
                 if request.FILES.get("cover"):
-                    MarketListingImage.objects.create(listing=obj, image=request.FILES["cover"])
+                    MarketListingImage.objects.create(
+                        listing=obj, image=request.FILES["cover"]
+                    )
                 for f in request.FILES.getlist("gallery"):
                     MarketListingImage.objects.create(listing=obj, image=f)
                 if request.FILES.get("floorplan"):
-                    MarketListingImage.objects.create(listing=obj, image=request.FILES["floorplan"])
+                    MarketListingImage.objects.create(
+                        listing=obj, image=request.FILES["floorplan"]
+                    )
 
             messages.success(request, "Woning aangemaakt.")
             return redirect("owner_my")
         else:
             # toon eerste fouten in bericht
-            first = next(iter(form.errors.values()))[0] if form.errors else "Onbekende validatiefout."
+            first = (
+                next(iter(form.errors.values()))[0]
+                if form.errors
+                else "Onbekende validatiefout."
+            )
             messages.error(request, f"Kan niet opslaan: {first}")
     else:
         form = OwnerNewForm()
     return render(request, "dash/owner/new.html", {"form": form})
+
 
 @login_required
 def owner_listing_edit(request, slug):
@@ -97,15 +111,18 @@ def owner_listing_edit(request, slug):
         if form.is_valid():
             obj = form.save()
             # uploads
-            if request.FILES.get('new_cover'):
-                MarketListingImage.objects.create(listing=obj, image=request.FILES['new_cover'])
-            for f in request.FILES.getlist('new_gallery'):
+            if request.FILES.get("new_cover"):
+                MarketListingImage.objects.create(
+                    listing=obj, image=request.FILES["new_cover"]
+                )
+            for f in request.FILES.getlist("new_gallery"):
                 MarketListingImage.objects.create(listing=obj, image=f)
             messages.success(request, "Woning opgeslagen.")
             return redirect("owner_my")
     else:
         form = OwnerListingForm(instance=obj)
     return render(request, "dash/owner/edit.html", {"form": form, "obj": obj})
+
 
 @login_required
 def owner_profile(request):
@@ -119,7 +136,11 @@ def owner_profile(request):
             return redirect("owner_profile")
     else:
         form = OwnerProfileForm(instance=obj)
-    return render(request, "dash/owner/profile.html", {"form": form, "obj": obj, "editing": editing})
+    return render(
+        request,
+        "dash/owner/profile.html",
+        {"form": form, "obj": obj, "editing": editing},
+    )
 
 
 def _unique_slug(model, base):

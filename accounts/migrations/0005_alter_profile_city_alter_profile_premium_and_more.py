@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0004_profile_premium'),
+        ("accounts", "0004_profile_premium"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='city',
+            model_name="profile",
+            name="city",
             field=models.CharField(blank=True, max_length=120, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='premium',
+            model_name="profile",
+            name="premium",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='province',
+            model_name="profile",
+            name="province",
             field=models.CharField(blank=True, max_length=64, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='role',
+            model_name="profile",
+            name="role",
             field=models.CharField(blank=True, max_length=50, null=True),
         ),
     ]

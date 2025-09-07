@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from properties.models import ExchangeOffer, Wish
+from django.shortcuts import redirect, render
+
 from accounts.models import Profile
-from .forms import MemberOwnForm, ExchangeImageFormSet, WishForm, ProfileForm
+from properties.models import ExchangeOffer, Wish
+
+from .forms import ExchangeImageFormSet, MemberOwnForm, ProfileForm, WishForm
 
 
 @login_required
@@ -40,7 +42,9 @@ def member_own(request):
                     for fld, msgs in e.message_dict.items():
                         for m in msgs:
                             form.add_error(fld, m)
-                    messages.error(request, "Publiceren mislukt: vul alle verplichte velden in.")
+                    messages.error(
+                        request, "Publiceren mislukt: vul alle verplichte velden in."
+                    )
                     inst.is_published = False
                 else:
                     inst.save()

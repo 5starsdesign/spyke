@@ -6,13 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0006_agencyprofile'),
+        ("accounts", "0006_agencyprofile"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='role',
-            field=models.CharField(blank=True, choices=[('MEMBER', 'Lid'), ('OWNER', 'Eigenaar'), ('AGENCY', 'Makelaarskantoor')], max_length=50, null=True),
+            model_name="profile",
+            name="role",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("MEMBER", "Lid"),
+                    ("OWNER", "Eigenaar"),
+                    ("AGENCY", "Makelaarskantoor"),
+                ],
+                max_length=50,
+                null=True,
+            ),
         ),
     ]

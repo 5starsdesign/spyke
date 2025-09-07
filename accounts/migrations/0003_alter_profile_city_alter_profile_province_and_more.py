@@ -6,23 +6,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0002_remove_profile_bio_remove_profile_company_name_and_more'),
+        ("accounts", "0002_remove_profile_bio_remove_profile_company_name_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='city',
+            model_name="profile",
+            name="city",
             field=models.CharField(blank=True, max_length=100, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='province',
+            model_name="profile",
+            name="province",
             field=models.CharField(blank=True, max_length=100, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='role',
-            field=models.CharField(choices=[('MEMBER', 'Lid (woningruil)'), ('AGENCY', 'Makelaar'), ('OWNER', 'Huizenbezitter')], default='MEMBER', max_length=16),
+            model_name="profile",
+            name="role",
+            field=models.CharField(
+                choices=[
+                    ("MEMBER", "Lid (woningruil)"),
+                    ("AGENCY", "Makelaar"),
+                    ("OWNER", "Huizenbezitter"),
+                ],
+                default="MEMBER",
+                max_length=16,
+            ),
         ),
     ]

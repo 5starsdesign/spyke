@@ -1,0 +1,166 @@
+.woning-hero {
+  margin-bottom: 1rem;
+}
+.hoofdfoto {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+.thumbnails {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.thumb {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.thumb.more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-weight: bold;
+}
+.woning-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.woning-header .sub-info {
+  font-size: 1.1rem;
+  color: #666;
+}
+.kenmerken dt {
+  float: left;
+  width: 160px;
+  font-weight: bold;
+}
+.kenmerken dd {
+  margin: 0 0 8px 170px;
+}
+.cta-buttons .btn {
+  margin-right: 8px;
+}
+
+}
+.lb-prev:hover, .lb-next:hover {
+  opacity: 1;
+}
+
+
+/* --- Lightbox clean overrides --- */
+.lb-image {
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+.lb-prev, .lb-next {
+  font-size: 3rem !important;
+  color: #fff !important;
+  opacity: 0.8;
+}
+.lb-prev:hover, .lb-next:hover {
+  opacity: 1;
+}
+
+/* --- Lightbox UI overrides --- */
+.lb-image {
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+.lb-prev, .lb-next {
+  font-size: 3rem !important;
+  color: #fff !important;
+  opacity: 0.8;
+}
+
+.lb-prev:hover, .lb-next:hover {
+  opacity: 1;
+}
+
+.lb-close {
+  font-size: 2rem !important;
+  color: #fff !important;
+  opacity: 0.9;
+  right: 20px !important;
+  top: 20px !important;
+}
+
+/* --- GLightbox overrides --- */
+.glightbox-clean .gslide-image img {
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+.glightbox-clean .gnext,
+.glightbox-clean .gprev,
+.glightbox-clean .gclose {
+  font-size: 2rem;
+  opacity: 0.9;
+}
+.glightbox-clean .gnext:hover,
+.glightbox-clean .gprev:hover,
+.glightbox-clean .gclose:hover {
+  opacity: 1;
+}
+
+/* --- Woningpagina uniforme foto styling --- */
+
+/* Hero coverfoto */
+.hoofdfoto {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  background: #f0f0f0;
+}
+
+/* Thumbnail grid */
+.thumbnails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.thumb {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #f0f0f0;
+}
+
+/* GLightbox beelden in uniform kader */
+.glightbox-clean .gslide-image img {
+  max-width: 85vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+  background: #000;
+}
+
+/* --- GLightbox foto in vast frame --- */
+.glightbox-clean .gslide-image img {
+  width: 800px;
+  height: 800px;
+  max-width: 90vw;   /* responsive fallback */
+  max-height: 90vh;
+  object-fit: contain; /* past foto in frame zonder vervormen */
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+  background: #000;  /* zwart kader rondom */
+}
+
+/* --- GLightbox title/desc verbergen --- */
+.glightbox-clean .gdesc,
+.glightbox-clean .gslide-title {
+  display: none !important;
+}

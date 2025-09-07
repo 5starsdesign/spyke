@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 class Profile(models.Model):
@@ -13,7 +13,13 @@ class Profile(models.Model):
         (ROLE_AGENCY, "Makelaarskantoor"),
     ]
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+    class Meta:
+        verbose_name = "Leden profiel"
+        verbose_name_plural = "Leden profielen"
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
+    )
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, blank=True, null=True)
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
@@ -32,8 +38,14 @@ class Profile(models.Model):
 
 
 class AgencyProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="agency_profile")
-    company_legal_name = models.CharField("Bedrijfsnaam (juridisch)", max_length=200, blank=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="agency_profile",
+    )
+    company_legal_name = models.CharField(
+        "Bedrijfsnaam (juridisch)", max_length=200, blank=True
+    )
     company_trade_name = models.CharField("Handelsnaam", max_length=200, blank=True)
     kvk_number = models.CharField("KVK-nummer", max_length=32, blank=True)
     vat_number = models.CharField("BTW-nummer", max_length=32, blank=True)
@@ -52,14 +64,22 @@ class AgencyProfile(models.Model):
     primary_phone = models.CharField("Telefoon", max_length=64, blank=True)
     website = models.URLField("Website", blank=True)
 
-    hq_opening_hours = models.CharField("Openingstijden (hoofdkantoor)", max_length=200, blank=True)
-    extra_branches = models.TextField("Extra vestigingen (één per regel: adres | tel | openingstijden)", blank=True)
-    lead_contacts = models.TextField("Contactpersonen leads (één per regel: naam | rol | e-mail | tel)", blank=True)
+    hq_opening_hours = models.CharField(
+        "Openingstijden (hoofdkantoor)", max_length=200, blank=True
+    )
+    extra_branches = models.TextField(
+        "Extra vestigingen (één per regel: adres | tel | openingstijden)", blank=True
+    )
+    lead_contacts = models.TextField(
+        "Contactpersonen leads (één per regel: naam | rol | e-mail | tel)", blank=True
+    )
 
     logo = models.ImageField(upload_to="agency/logo/", blank=True, null=True)
     cover = models.ImageField(upload_to="agency/cover/", blank=True, null=True)
     brand_primary_color = models.CharField(max_length=7, blank=True, default="#0d6efd")
-    brand_secondary_color = models.CharField(max_length=7, blank=True, default="#6c757d")
+    brand_secondary_color = models.CharField(
+        max_length=7, blank=True, default="#6c757d"
+    )
     brand_accent_color = models.CharField(max_length=7, blank=True, default="#198754")
     brand_style = models.TextField("Kleuren/merkstijl (notities)", blank=True)
     bio = models.TextField("Korte bio/omschrijving", blank=True)
@@ -75,11 +95,18 @@ class AgencyProfile(models.Model):
 
     class Meta:
         ordering = ["-updated_at"]
+        verbose_name = "Makelaars profiel"
+        verbose_name_plural = "Makelaars profielen"
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base = self.company_trade_name or self.company_legal_name or (self.user.get_username() if self.user_id else "agency")
+            base = (
+                self.company_trade_name
+                or self.company_legal_name
+                or (self.user.get_username() if self.user_id else "agency")
+            )
             from django.utils.text import slugify
+
             base = slugify(base)[:200] or "agency"
             slug = base
             i = 2
@@ -92,11 +119,10 @@ class AgencyProfile(models.Model):
     def __str__(self):
         return self.company_trade_name or self.company_legal_name or f"Agency {self.pk}"
 
+
 class OwnerProfile(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="owner_profile"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="owner_profile"
     )
     display_name = models.CharField(max_length=200, blank=True)
     address = models.CharField(max_length=255, blank=True)
@@ -106,6 +132,10 @@ class OwnerProfile(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Eigenaars profiel"
+        verbose_name_plural = "Eigenaars profielen"
 
     def __str__(self):
         return self.display_name or f"Owner {self.user.username}"

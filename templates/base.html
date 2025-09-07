@@ -2,6 +2,7 @@
 <!doctype html>
 <html lang="nl">
   <head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
   <title>{% block title %}123woningruilen.nl{% endblock %}</title>
   {% include "partials/meta.html" %}
   <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
@@ -59,8 +60,35 @@
     <script src="{% static 'js/cookie-consent.js' %}"></script>
   {% include "includes/_cookie_consent.html" %}
     {% block extra_js %}{% endblock %}
-  {% include "includes/_access.html" %}
+  {% if paywall %}{% include "includes/_access.html" %}{% endif %}
 {% if request.path|default:""|slice:":9" == "/woningen" %}{% include "includes/_auto_lock_properties.html" %}{% endif %}
+<script>
+
+
+  "resizeDuration": 200,
+
+  "wrapAround": true,
+
+  "fitImagesInViewport": true,
+
+  "positionFromTop": 60,
+
+  "showImageNumberLabel": false,
+
+  "disableScrolling": true
+
+});
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script>
+  const lightbox = GLightbox({
+    selector: ".glightbox",
+    touchNavigation: true,
+    loop: true,
+    zoomable: true
+  });
+</script>
 </body>
 </html>
 

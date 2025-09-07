@@ -15,52 +15,116 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=80, unique=True)),
-                ('slug', models.SlugField(max_length=90, unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=80, unique=True)),
+                ("slug", models.SlugField(max_length=90, unique=True)),
             ],
             options={
-                'verbose_name_plural': 'Categories',
-                'ordering': ['name'],
+                "verbose_name_plural": "Categories",
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=40, unique=True)),
-                ('slug', models.SlugField(unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=40, unique=True)),
+                ("slug", models.SlugField(unique=True)),
             ],
             options={
-                'ordering': ['name'],
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='Post',
+            name="Post",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('slug', models.SlugField(max_length=220, unique=True)),
-                ('excerpt', models.TextField(blank=True)),
-                ('content', models.TextField()),
-                ('cover', models.ImageField(blank=True, null=True, upload_to='blog/covers/')),
-                ('status', models.CharField(choices=[('DRAFT', 'Concept'), ('PUBLISHED', 'Gepubliceerd')], db_index=True, default='DRAFT', max_length=12)),
-                ('published_at', models.DateTimeField(blank=True, db_index=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('seo_title', models.CharField(blank=True, max_length=255)),
-                ('seo_description', models.CharField(blank=True, max_length=160)),
-                ('canonical_url', models.URLField(blank=True)),
-                ('og_image', models.ImageField(blank=True, null=True, upload_to='blog/og/')),
-                ('author', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('categories', models.ManyToManyField(blank=True, related_name='posts', to='blog.category')),
-                ('tags', models.ManyToManyField(blank=True, related_name='posts', to='blog.tag')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("slug", models.SlugField(max_length=220, unique=True)),
+                ("excerpt", models.TextField(blank=True)),
+                ("content", models.TextField()),
+                (
+                    "cover",
+                    models.ImageField(blank=True, null=True, upload_to="blog/covers/"),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[("DRAFT", "Concept"), ("PUBLISHED", "Gepubliceerd")],
+                        db_index=True,
+                        default="DRAFT",
+                        max_length=12,
+                    ),
+                ),
+                (
+                    "published_at",
+                    models.DateTimeField(blank=True, db_index=True, null=True),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("seo_title", models.CharField(blank=True, max_length=255)),
+                ("seo_description", models.CharField(blank=True, max_length=160)),
+                ("canonical_url", models.URLField(blank=True)),
+                (
+                    "og_image",
+                    models.ImageField(blank=True, null=True, upload_to="blog/og/"),
+                ),
+                (
+                    "author",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "categories",
+                    models.ManyToManyField(
+                        blank=True, related_name="posts", to="blog.category"
+                    ),
+                ),
+                (
+                    "tags",
+                    models.ManyToManyField(
+                        blank=True, related_name="posts", to="blog.tag"
+                    ),
+                ),
             ],
             options={
-                'ordering': ('-published_at', '-created_at'),
-                'indexes': [models.Index(fields=['status', 'published_at'], name='blog_post_status_5b2843_idx')],
+                "ordering": ("-published_at", "-created_at"),
+                "indexes": [
+                    models.Index(
+                        fields=["status", "published_at"],
+                        name="blog_post_status_5b2843_idx",
+                    )
+                ],
             },
         ),
     ]

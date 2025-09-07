@@ -1,47 +1,58 @@
 from django.contrib import admin
-from .models import (
-    MarketListing, MarketListingImage,
-    ExchangeOffer, ExchangeOfferImage, Wish
-)
+from django.urls import reverse
+from django.utils.html import format_html
 
-def has_field(model, name: str) -> bool:
-    try:
-        model._meta.get_field(name)
-        return True
-    except Exception:
-        return False
+from .models import ExchangeOffer, MarketListing
 
-# ---- MarketListing ----
+
+@admin.register(MarketListing)
 class MarketListingAdmin(admin.ModelAdmin):
-    list_display = [f for f in (
-        'title', 'city', 'listing_kind', 'price',
-        'is_published' if has_field(MarketListing, 'is_published') else None,
-        'is_featured'  if has_field(MarketListing, 'is_featured')  else None,
-        'created_at'   if has_field(MarketListing, 'created_at')   else None,
-    ) if isinstance(f, str)]
-    list_filter = [f for f in (
-        'listing_kind', 'property_type', 'city',
-        'is_published' if has_field(MarketListing, 'is_published') else None,
-        'is_featured'  if has_field(MarketListing, 'is_featured')  else None,
-    ) if isinstance(f, str)]
-    search_fields = ('title', 'address', 'city', 'postcode')
+    list_display = (
+        "title",
+        "city",
+        "owner",
+        "listing_kind",
+        "published_marker",
+        "view_link",
+    )
+    search_fields = ("title", "city", "address", "owner__username", "owner__email")
+    list_filter = ("listing_kind", "is_published", "is_featured")
 
-admin.site.register(MarketListing, MarketListingAdmin)
-admin.site.register(MarketListingImage)
+    def published_marker(self, obj):
+        return format_html(
+            '<span style="color:{};">{}</span>',
+            "green" if obj.is_published else "red",
+            "✅ Ja" if obj.is_published else "❌ Nee",
+        )
 
-# ---- ExchangeOffer (ruil) ----
+    published_marker.short_description = "Gepubliceerd"
+
+    def view_link(self, obj):
+        url = (
+            f"/woningen/{'huur' if obj.listing_kind == 'HUUR' else 'koop'}/{obj.slug}/"
+        )
+        return format_html('<a href="{}" target="_blank">Bekijk</a>', url)
+
+    view_link.short_description = "Bekijk"
+
+
+@admin.register(ExchangeOffer)
 class ExchangeOfferAdmin(admin.ModelAdmin):
-    list_display = [f for f in (
-        'member', 'my_title', 'my_city',
-        'is_published' if has_field(ExchangeOffer, 'is_published') else None,
-        'created_at'   if has_field(ExchangeOffer, 'created_at')   else None,
-    ) if isinstance(f, str)]
-    list_filter = [f for f in (
-        'my_city',
-        'is_published' if has_field(ExchangeOffer, 'is_published') else None,
-    ) if isinstance(f, str)]
-    search_fields = ('my_title', 'my_city', 'member__username', 'member__email')
+    list_display = ("my_title", "member", "my_city", "published_marker", "view_link")
+    search_fields = ("my_title", "my_city", "member__username", "member__email")
+    list_filter = ("is_published", "my_property_type", "my_city")
 
-admin.site.register(ExchangeOffer, ExchangeOfferAdmin)
-admin.site.register(ExchangeOfferImage)
-admin.site.register(Wish)
+    def published_marker(self, obj):
+        return format_html(
+            '<span style="color:{};">{}</span>',
+            "green" if obj.is_published else "red",
+            "✅ Ja" if obj.is_published else "❌ Nee",
+        )
+
+    published_marker.short_description = "Gepubliceerd"
+
+    def view_link(self, obj):
+        url = f"/woningen/ruil/{obj.id}/"
+        return format_html('<a href="{}" target="_blank">Bekijk</a>', url)
+
+    view_link.short_description = "Bekijk"

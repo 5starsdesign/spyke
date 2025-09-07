@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ offer.my_title }}</h1>
+<p style="color:red;">TEMPLATE LOADED: marketlisting_detail.html</p>
+
+<p>{{ offer.my_address }} {{ offer.my_postcode }} {{ offer.my_city }}</p>
+<p>Oppervlakte: {{ offer.my_living_area }} m²</p>
+<p>{{ offer.my_description|linebreaks }}</p>
+{% endblock %}

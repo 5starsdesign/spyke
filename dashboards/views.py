@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+from django.shortcuts import redirect, render
+
 from accounts.models import Profile
-from properties.models import MarketListing, ExchangeOffer
-from properties.forms import MarketListingForm, ExchangeOfferForm
 from matchmaking.utils import find_matches_for
+from properties.forms import ExchangeOfferForm, MarketListingForm
+from properties.models import ExchangeOffer, MarketListing
 
 
 def role_guard(user, role):
@@ -22,7 +23,9 @@ def role_required(role):
             if not role_guard(request.user, role):
                 return HttpResponseForbidden("Geen toegang")
             return fn(request, *a, **kw)
+
         return login_required(wrapper)
+
     return dec
 
 
@@ -31,7 +34,9 @@ def role_required(role):
 def member_home(request):
     offer = ExchangeOffer.objects.filter(member=request.user).first()
     matches = find_matches_for(offer) if offer else []
-    return render(request, "dash/member/home.html", {"offer": offer, "matches": matches})
+    return render(
+        request, "dash/member/home.html", {"offer": offer, "matches": matches}
+    )
 
 
 @role_required(Profile.ROLE_MEMBER)

@@ -1,10 +1,10 @@
 from django.contrib import admin
-from django.contrib.auth import login, get_user_model
-from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth import get_user_model, login
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import path
 from django.utils.html import format_html
 
-from .models import Profile, AgencyProfile, OwnerProfile
+from .models import AgencyProfile, OwnerProfile, Profile
 
 User = get_user_model()
 
@@ -26,6 +26,7 @@ class UserAdminWithLogin(admin.ModelAdmin):
             '<a class="button" href="/admin/login-as/{}/">Ga naar dashboard</a>',
             obj.pk,
         )
+
     go_to_dashboard.short_description = "Dashboard"
 
     def get_urls(self):
@@ -40,6 +41,7 @@ class UserAdminWithLogin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdminWithLogin)
 
+
 # Bestaande admin-registraties
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
@@ -48,9 +50,23 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(AgencyProfile)
 class AgencyProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "company_trade_name", "company_legal_name", "kvk_number", "published", "updated_at")
+    list_display = (
+        "user",
+        "company_trade_name",
+        "company_legal_name",
+        "kvk_number",
+        "published",
+        "updated_at",
+    )
     list_filter = ("published",)
-    search_fields = ("company_trade_name", "company_legal_name", "kvk_number", "vat_number", "user__username", "user__email")
+    search_fields = (
+        "company_trade_name",
+        "company_legal_name",
+        "kvk_number",
+        "vat_number",
+        "user__username",
+        "user__email",
+    )
 
 
 @admin.register(OwnerProfile)

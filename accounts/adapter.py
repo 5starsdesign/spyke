@@ -1,5 +1,8 @@
 from allauth.account.adapter import DefaultAccountAdapter
+
 from accounts.models import Profile
+
+
 class RoleAccountAdapter(DefaultAccountAdapter):
     def save_user(self, request, user, form, commit=True):
         user = super().save_user(request, user, form, commit)

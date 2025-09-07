@@ -10,10 +10,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN useradd -ms /bin/bash appuser
 WORKDIR /app
 
-COPY requirements.txt /app/
-RUN python -m pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# Kopieer eerst requirements-bestanden
+COPY requirements.txt requirements-dev.txt /app/
 
+# Installeer requirements (prod én optioneel dev)
+ARG INSTALL_DEV=false
+RUN pip install --no-cache-dir -r requirements.txt && \
+    if [ "$INSTALL_DEV" = "true" ]; then pip install --no-cache-dir -r requirements-dev.txt; fi
+
+# Kopieer startscript
 COPY startup.sh /app/startup.sh
 RUN chmod +x /app/startup.sh
 

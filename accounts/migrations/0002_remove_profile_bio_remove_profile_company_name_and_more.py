@@ -8,62 +8,66 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0001_initial'),
+        ("accounts", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='profile',
-            name='bio',
+            model_name="profile",
+            name="bio",
         ),
         migrations.RemoveField(
-            model_name='profile',
-            name='company_name',
+            model_name="profile",
+            name="company_name",
         ),
         migrations.RemoveField(
-            model_name='profile',
-            name='display_name',
+            model_name="profile",
+            name="display_name",
         ),
         migrations.RemoveField(
-            model_name='profile',
-            name='is_premium',
+            model_name="profile",
+            name="is_premium",
         ),
         migrations.RemoveField(
-            model_name='profile',
-            name='logo',
+            model_name="profile",
+            name="logo",
         ),
         migrations.RemoveField(
-            model_name='profile',
-            name='phone',
+            model_name="profile",
+            name="phone",
         ),
         migrations.RemoveField(
-            model_name='profile',
-            name='slug',
+            model_name="profile",
+            name="slug",
         ),
         migrations.AddField(
-            model_name='profile',
-            name='postcode',
+            model_name="profile",
+            name="postcode",
             field=models.CharField(blank=True, max_length=16, null=True),
         ),
         migrations.AddField(
-            model_name='profile',
-            name='province',
+            model_name="profile",
+            name="province",
             field=models.CharField(blank=True, max_length=64, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='address',
+            model_name="profile",
+            name="address",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='city',
+            model_name="profile",
+            name="city",
             field=models.CharField(blank=True, max_length=128, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='user',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL),
+            model_name="profile",
+            name="user",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="profile",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

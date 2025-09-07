@@ -1,39 +1,40 @@
-from pathlib import Path
 import os
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "CHANGE-ME")
 DEBUG = bool(int(os.getenv("DJANGO_DEBUG", "1")))
-ALLOWED_HOSTS = [h for h in os.getenv("DJANGO_ALLOWED_HOSTS","").split(",") if h]
-CSRF_TRUSTED_ORIGINS = [o for o in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS","").split(",") if o]
+ALLOWED_HOSTS = [h for h in os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",") if h]
+CSRF_TRUSTED_ORIGINS = [
+    o for o in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",") if o
+]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-TIME_ZONE = os.getenv("DJANGO_TIME_ZONE","Europe/Amsterdam")
+TIME_ZONE = os.getenv("DJANGO_TIME_ZONE", "Europe/Amsterdam")
 USE_TZ = True
 LANGUAGE_CODE = "nl"
 
 INSTALLED_APPS = [
-    'newsletter',
-    'blog',
+    "newsletter",
+    "blog",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "django.contrib.sites",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-
     "accounts",
     "properties",
     "dashboards",
     "pages",
     "matchmaking",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -46,7 +47,7 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "accounts.middleware.AnonHomeOnlyMiddleware"
+    "accounts.middleware.AnonHomeOnlyMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -78,14 +79,19 @@ DATABASES = {
         "NAME": os.getenv("POSTGRES_DB"),
         "USER": os.getenv("POSTGRES_USER"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST","db"),
-        "PORT": int(os.getenv("POSTGRES_PORT","5432")),
+        "HOST": os.getenv("POSTGRES_HOST", "db"),
+        "PORT": int(os.getenv("POSTGRES_PORT", "5432")),
     }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", "OPTIONS": {"min_length": 12}},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 12},
+    },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
@@ -127,11 +133,19 @@ ACCOUNT_ADAPTER = "accounts.adapter.RoleAccountAdapter"
 SOCIALACCOUNT_AUTO_SIGNUP = False
 
 # --- Premium e-mail whitelist ---
-PREMIUM_EMAILS = [e.strip() for e in os.getenv("PREMIUM_EMAILS","").split(",") if e.strip()]
+PREMIUM_EMAILS = [
+    e.strip() for e in os.getenv("PREMIUM_EMAILS", "").split(",") if e.strip()
+]
 
 # --- Mailchimp ---
 import os
+
 MAILCHIMP_API_KEY = os.getenv("MAILCHIMP_API_KEY", "")
 MAILCHIMP_SERVER_PREFIX = os.getenv("MAILCHIMP_SERVER_PREFIX", "")  # bv. "us21"
 MAILCHIMP_LIST_ID = os.getenv("MAILCHIMP_LIST_ID", "")
-MAILCHIMP_DOUBLE_OPTIN = os.getenv("MAILCHIMP_DOUBLE_OPTIN", "true").lower() in ("1","true","yes","on")
+MAILCHIMP_DOUBLE_OPTIN = os.getenv("MAILCHIMP_DOUBLE_OPTIN", "true").lower() in (
+    "1",
+    "true",
+    "yes",
+    "on",
+)

@@ -1,21 +1,43 @@
+# accounts/middleware.py
 from django.http import HttpResponseRedirect
 from django.urls import resolve
 
-ALLOW_PREFIX = ("/static/", "/media/", "/accounts/", "/health/", "/favicon", "/robots.txt")
-ALLOW_EXACT  = ("/",)
+ALLOW_PREFIX = (
+    "/static/",
+    "/media/",
+    "/accounts/",
+    "/health/",
+    "/favicon",
+    "/robots.txt",
+)
+
+ALLOW_EXACT = (
+    "/", 
+    "/ruilwoningen/",
+    "/huurwoningen/",
+    "/koopwoningen/",
+    "/blog/",
+)
+
+ALLOW_STARTSWITH = (
+    "/woningen/huur/",
+    "/woningen/koop/",
+    "/woningen/ruil/",
+)
 
 class AnonHomeOnlyMiddleware:
-    def __init__(self, get_response): self.get_response = get_response
+    def __init__(self, get_response):
+        self.get_response = get_response
+
     def __call__(self, request):
         u = getattr(request, "user", None)
         if u and u.is_authenticated:
             return self.get_response(request)
 
         path = request.path
-        if path in ALLOW_EXACT or path.startswith(ALLOW_PREFIX):
+        if path in ALLOW_EXACT or path.startswith(ALLOW_PREFIX) or path.startswith(ALLOW_STARTSWITH):
             return self.get_response(request)
 
-        # Laat admin-login scherm toe:
         if path.startswith("/admin/"):
             try:
                 match = resolve(path)
@@ -24,5 +46,4 @@ class AnonHomeOnlyMiddleware:
             except Exception:
                 pass
 
-        # Alles anders: terug naar home met signup-popup
         return HttpResponseRedirect("/?signup=1")

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ listing.title|default:listing.address }}</h1>
+<p style="color:red;">TEMPLATE LOADED: marketlisting_detail.html</p>
+
+<!-- Coverfoto of placeholder -->
+<div>
+  <img src="{{ listing.cover_url }}" style="max-width:400px;" alt="Hoofdfoto">
+</div>
+
+<p><strong>Adres:</strong> {{ listing.address }} {{ listing.postcode }} {{ listing.city }}</p>
+<p><strong>Type:</strong> {{ listing.get_property_type_display }}</p>
+<p><strong>Oppervlakte:</strong> {{ listing.living_area }} m²</p>
+<p><strong>Kamers:</strong> {{ listing.rooms }}</p>
+
+<p><strong>Beschrijving:</strong><br>{{ listing.description|linebreaksbr }}</p>
+
+<h3>Galerij</h3>
+{% if listing.images.all %}
+  {% for im in listing.images.all|slice:"1:" %}
+    <img src="{{ im.image.url }}" style="max-width:200px;" alt="foto {{ forloop.counter }}">
+  {% endfor %}
+{% else %}
+  <p>Geen extra foto's</p>
+{% endif %}
+{% endblock %}

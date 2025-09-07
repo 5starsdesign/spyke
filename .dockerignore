@@ -1,24 +1,15 @@
+# Testcode uitsluiten van staging/live builds
+tests/
+
+# Overige standaard dingen
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.db
 *.sqlite3
 *.log
 *.pot
-*.mo
-*.db
+*.py[co]
+*.egg-info/
 .env
-.git/
-.vscode/
-.idea/
-dist/
-build/
-staticfiles/
-media/
-*.egg-info
-*.egg
-.tox/
-.pytest_cache/
-.coverage
-.DS_Store
-Thumbs.db

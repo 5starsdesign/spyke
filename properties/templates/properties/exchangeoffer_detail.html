@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/woning.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+<div class="woning-hero">
+  {% if offer.my_cover %}
+    <a href="{{ offer.my_cover.url }}" class="hoofdfoto" data-gallery="ruilwoning">
+      <img src="{{ offer.my_cover.url }}" alt="{{ offer.my_title }}" class="hoofdfoto">
+    </a>
+  {% endif %}
+
+  {% if offer.images.all %}
+  <div class="thumbnails">
+    {% for im in offer.images.all %}
+      <a href="{{ im.image.url }}" data-gallery="ruilwoning">
+        <img src="{{ im.image.url }}" alt="foto {{ forloop.counter }}" class="thumb">
+      </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+<header class="woning-header my-4">
+  <h1>{{ offer.my_title }}</h1>
+  <p><strong>Adres:</strong> {{ offer.my_address }} {{ offer.my_postcode }} {{ offer.my_city }}</p>
+  <p><strong>Type:</strong> {{ offer.get_my_property_type_display }}</p>
+  <p><strong>Oppervlakte:</strong> {{ offer.my_living_area }} m²</p>
+  <p><strong>Kamers:</strong> {{ offer.my_rooms }}</p>
+</header>
+
+<div class="woning-beschrijving">
+  <h2>Omschrijving</h2>
+  <p>{{ offer.my_description|linebreaksbr }}</p>
+</div>
+
+<script>
+  const lightbox = GLightbox({
+    selector: '[data-gallery="ruilwoning"]',
+    loop: true,
+    closeButton: true,
+  });
+</script>
+{% endblock %}

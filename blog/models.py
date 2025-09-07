@@ -1,27 +1,37 @@
-from django.db import models
 from django.contrib.auth import get_user_model
-from django.utils.text import slugify
+from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 User = get_user_model()
+
 
 class Category(models.Model):
     name = models.CharField(max_length=80, unique=True)
     slug = models.SlugField(max_length=90, unique=True)
+
     class Meta:
-        verbose_name_plural = "Categories"
+        verbose_name_plural = "Categorieën"
         ordering = ["name"]
-    def __str__(self): return self.name
+
+    def __str__(self):
+        return self.name
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=40, unique=True)
     slug = models.SlugField(max_length=50, unique=True)
+
     class Meta:
         ordering = ["name"]
-    def __str__(self): return self.name
+
+    def __str__(self):
+        return self.name
+
 
 class Post(models.Model):
-    DRAFT = "DRAFT"; PUBLISHED = "PUBLISHED"
+    DRAFT = "DRAFT"
+    PUBLISHED = "PUBLISHED"
     STATUS_CHOICES = [(DRAFT, "Concept"), (PUBLISHED, "Gepubliceerd")]
 
     title = models.CharField(max_length=200)
@@ -34,7 +44,9 @@ class Post(models.Model):
     categories = models.ManyToManyField(Category, blank=True, related_name="posts")
     tags = models.ManyToManyField(Tag, blank=True, related_name="posts")
 
-    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default=DRAFT, db_index=True)
+    status = models.CharField(
+        max_length=12, choices=STATUS_CHOICES, default=DRAFT, db_index=True
+    )
     published_at = models.DateTimeField(null=True, blank=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -47,13 +59,18 @@ class Post(models.Model):
 
     class Meta:
         ordering = ("-published_at", "-created_at")
-        indexes = [models.Index(fields=["status","published_at"])]
+        indexes = [models.Index(fields=["status", "published_at"])]
 
-    def __str__(self): return self.title
+    def __str__(self):
+        return self.title
+
     @property
-    def is_published(self): return self.status == self.PUBLISHED
+    def is_published(self):
+        return self.status == self.PUBLISHED
+
     def save(self, *args, **kwargs):
         from django.utils.text import slugify
+
         cls = type(self)
         base = slugify((self.slug or self.title) or "")[:200]  # ruimte voor suffix
         if not base:
@@ -66,5 +83,6 @@ class Post(models.Model):
             i += 1
         self.slug = s
         super().save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse("blog:detail", kwargs={"slug": self.slug})

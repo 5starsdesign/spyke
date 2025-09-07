@@ -1,5 +1,7 @@
 from django.urls import path
+
 from . import views
+
 urlpatterns = [
     path("", views.home, name="home"),
     path("ruilwoningen/", views.ruil_list, name="ruil_list_public"),
